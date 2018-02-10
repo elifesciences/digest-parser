@@ -14,7 +14,7 @@ setup(
     packages=['digestparser'],
     license='MIT',
     install_requires=[
-        "xlrd"
+        "python-docx"
     ],
     url='https://github.com/elifesciences/digest-parser',
     maintainer='eLife Sciences Publications Ltd.',

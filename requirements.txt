@@ -1,2 +1,2 @@
-xlrd==0.9.3
+python-docx==0.8.6
 coverage==4.4.2
