@@ -35,20 +35,20 @@ def run_contains_break(run):
     return bool(run.text.endswith("\n") if run is not None else False)
 
 def run_has_attr(run, attr):
-    "check if a run has an attribute"
+    "check if a run has an attribute, for checking bold or italic for example"
     if not run:
         return None
     return getattr(run, attr)
 
-def open_close_style(run, prev_run, output, attr='italic'):
-    "open and close tags to include between runs"
+def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, attr):
+    "open and close tags to include between two strings based on their attributes"
     open_tag, close_tag = html_open_close_tag(style=attr)
     if not open_tag or not close_tag:
         return output
     # add the close tag first
     if (
-            (run_has_attr(prev_run, attr) and run_contains_break(prev_run)) or
-            (run_has_attr(prev_run, attr) and run_has_attr(run, attr) is not True)
+            (one_has_attr and one_contains_break) or
+            (one_has_attr and two_has_attr is not True)
         ):
         # check for new line
         if output.endswith("\n"):
@@ -57,18 +57,29 @@ def open_close_style(run, prev_run, output, attr='italic'):
             output += close_tag
     # add the open tag
     if (
-            (run_has_attr(run, attr) and run_contains_break(prev_run)) or
-            (run_has_attr(run, attr) and run_has_attr(prev_run, attr) is not True)
+            (two_has_attr and one_contains_break) or
+            (two_has_attr and one_has_attr is not True)
         ):
         output += open_tag
     return output
+
+def run_open_close_style(run, prev_run, output, attr):
+    "open and close tags to include between runs"
+    # extract run object data for the more general purpose function
+    return open_close_style(
+        one_has_attr=run_has_attr(prev_run, attr),
+        two_has_attr=run_has_attr(run, attr),
+        one_contains_break=run_contains_break(prev_run),
+        output=output,
+        attr=attr
+    )
 
 def join_runs(runs):
     output = ''
     prev_run = None
     for run in runs:
-        output = open_close_style(run, prev_run, output, 'italic')
-        output = open_close_style(run, prev_run, output, 'bold')
+        output = run_open_close_style(run, prev_run, output, 'italic')
+        output = run_open_close_style(run, prev_run, output, 'bold')
         output += run.text
         prev_run = run
     return output
