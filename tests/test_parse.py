@@ -30,5 +30,22 @@ class TestGenerate(unittest.TestCase):
         self.assertEqual(content, expected)
 
 
+    def test_html_open_close_tag_failure(self):
+        "test getting an open and close tag for a style that does not exist"
+        style = "not_a_style"
+        expected = None, None
+        self.assertEqual(parse.html_open_close_tag(style), expected)
+
+
+    def test_open_close_style_failure(self):
+        "test wrapping content in close and open tags for a style that does not exist"
+        run = None
+        prev_run = None
+        output = ''
+        style = "not_a_style"
+        expected = output
+        self.assertEqual(parse.open_close_style(run, prev_run, output, style), expected)
+
+
 if __name__ == '__main__':
     unittest.main()

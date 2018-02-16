@@ -10,16 +10,29 @@ def parse_content(file_name):
         content += join_runs(para.runs) + "\n"
     return content
 
+def html_open_tag(style):
+    "for the style return the HTML open tag"
+    style_map = {
+        'italic': '<i>',
+        'bold': '<b>'
+    }
+    return style_map.get(style)
+
+def html_close_tag(style):
+    "for the style return the HTML close tag"
+    style_map = {
+        'italic': '</i>',
+        'bold': '</b>'
+    }
+    return style_map.get(style)
+
+def html_open_close_tag(style):
+    "return the HTML open and close tags for the style"
+    return html_open_tag(style), html_close_tag(style)
+
 
 def open_close_style(run, prev_run, output, attr='italic'):
-    open_tag = None
-    close_tag = None
-    if attr == 'italic':
-        open_tag = '<i>'
-        close_tag = '</i>'
-    if attr == 'bold':
-        open_tag = '<b>'
-        close_tag = '</b>'
+    open_tag, close_tag = html_open_close_tag(style=attr)
     if not open_tag or not close_tag:
         return output
     # continue
