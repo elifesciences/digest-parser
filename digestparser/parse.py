@@ -36,12 +36,11 @@ def open_close_style(run, prev_run, output, attr='italic'):
     if not open_tag or not close_tag:
         return output
     # continue
-    run_contains_break = bool(run.text.endswith("\n"))
     prev_run_contains_break = bool(prev_run.text.endswith("\n") if prev_run is not None else False)
     # add the close tag first
     if (
-        (prev_run_contains_break and getattr(prev_run, attr) is True) or
-        (getattr(run, attr) is not True and prev_run and getattr(prev_run, attr) is True)
+            (prev_run_contains_break and getattr(prev_run, attr) is True) or
+            (getattr(run, attr) is not True and prev_run and getattr(prev_run, attr) is True)
         ):
         # check for new line
         if output.endswith("\n"):
@@ -50,8 +49,9 @@ def open_close_style(run, prev_run, output, attr='italic'):
             output += close_tag
     # add the open tag
     if (
-        (prev_run_contains_break and getattr(run, attr) is True) or
-        (getattr(run, attr) is True and (prev_run is None or getattr(prev_run, attr) is not True))
+            (prev_run_contains_break and getattr(run, attr) is True) or
+            (getattr(run, attr) is True and
+             (prev_run is None or getattr(prev_run, attr) is not True))
         ):
         output += open_tag
     return output
@@ -68,5 +68,5 @@ def join_runs(runs):
 
 if __name__ == "__main__":
     "debug while developing"
-    content = parse_content('tests/test_data/DIGEST 99999.docx')
-    print(content.encode('utf-8'))
+    digest_content = parse_content('tests/test_data/DIGEST 99999.docx')
+    print(digest_content.encode('utf-8'))
