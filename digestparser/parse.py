@@ -30,17 +30,25 @@ def html_open_close_tag(style):
     "return the HTML open and close tags for the style"
     return html_open_tag(style), html_close_tag(style)
 
+def run_contains_break(run):
+    "check if a document run contains a new line character"
+    return bool(run.text.endswith("\n") if run is not None else False)
+
+def run_has_attr(run, attr):
+    "check if a run has an attribute"
+    if not run:
+        return None
+    return getattr(run, attr)
 
 def open_close_style(run, prev_run, output, attr='italic'):
+    "open and close tags to include between runs"
     open_tag, close_tag = html_open_close_tag(style=attr)
     if not open_tag or not close_tag:
         return output
-    # continue
-    prev_run_contains_break = bool(prev_run.text.endswith("\n") if prev_run is not None else False)
     # add the close tag first
     if (
-            (prev_run_contains_break and getattr(prev_run, attr) is True) or
-            (getattr(run, attr) is not True and prev_run and getattr(prev_run, attr) is True)
+            (run_has_attr(prev_run, attr) and run_contains_break(prev_run)) or
+            (run_has_attr(prev_run, attr) and run_has_attr(run, attr) is not True)
         ):
         # check for new line
         if output.endswith("\n"):
@@ -49,9 +57,8 @@ def open_close_style(run, prev_run, output, attr='italic'):
             output += close_tag
     # add the open tag
     if (
-            (prev_run_contains_break and getattr(run, attr) is True) or
-            (getattr(run, attr) is True and
-             (prev_run is None or getattr(prev_run, attr) is not True))
+            (run_has_attr(run, attr) and run_contains_break(prev_run)) or
+            (run_has_attr(run, attr) and run_has_attr(prev_run, attr) is not True)
         ):
         output += open_tag
     return output
