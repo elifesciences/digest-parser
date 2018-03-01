@@ -88,3 +88,11 @@ if __name__ == "__main__":
     "debug while developing"
     digest_content = parse_content('tests/test_data/DIGEST 99999.docx')
     print(digest_content.encode('utf-8'))
+
+    """
+    for file_name in ['DIGEST 20713.docx', 'DIGEST 24728.docx', 'DIGEST 25783.docx', 'DIGEST 26726.docx']:
+        print("\n\n")
+        print(file_name)
+        digest_content = parse_content(file_name)
+        print(digest_content.encode('utf-8'))
+    """
