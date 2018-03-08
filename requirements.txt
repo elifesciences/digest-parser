@@ -1,3 +1,4 @@
 python-docx==0.8.6
 coverage==4.4.2
 ddt==1.1.0
+elifetools==0.1.8
