@@ -14,7 +14,10 @@ def html_open_tag(style):
     "for the style return the HTML open tag"
     style_map = {
         'italic': '<i>',
-        'bold': '<b>'
+        'bold': '<b>',
+        'underline': '<u>',
+        'subscript': '<sub>',
+        'superscript': '<sup>'
     }
     return style_map.get(style)
 
@@ -22,7 +25,10 @@ def html_close_tag(style):
     "for the style return the HTML close tag"
     style_map = {
         'italic': '</i>',
-        'bold': '</b>'
+        'bold': '</b>',
+        'underline': '</u>',
+        'subscript': '</sub>',
+        'superscript': '</sup>'
     }
     return style_map.get(style)
 
@@ -38,7 +44,11 @@ def run_has_attr(run, attr):
     "check if a run has an attribute, for checking bold or italic for example"
     if not run:
         return None
-    return getattr(run, attr)
+    try:
+        return getattr(run, attr)
+    except AttributeError:
+        # look at the font attribute if an AttributeError is thrown
+        return getattr(run.font, attr)
 
 def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, attr):
     "open and close tags to include between two strings based on their attributes"
@@ -53,6 +63,9 @@ def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, att
         # check for new line
         if output.endswith("\n"):
             output = output.rstrip("\n") + close_tag + "\n"
+        # check for font styles extending into whitespace
+        elif output.endswith(" "):
+            output = output.rstrip(" ") + close_tag + " "
         else:
             output += close_tag
     # add the open tag
@@ -80,6 +93,9 @@ def join_runs(runs):
     for run in runs:
         output = run_open_close_style(run, prev_run, output, 'italic')
         output = run_open_close_style(run, prev_run, output, 'bold')
+        output = run_open_close_style(run, prev_run, output, 'underline')
+        output = run_open_close_style(run, prev_run, output, 'subscript')
+        output = run_open_close_style(run, prev_run, output, 'superscript')
         output += run.text
         prev_run = run
     return output
