@@ -14,7 +14,6 @@ def allowed_xml_tag_fragments():
     return (
         '<italic>', '</italic>','<italic/>',
         '<bold>', '</bold>', '<bold/>',
-        '<underline>', '</underline>', '<underline/>',
         '<sub>', '</sub>', '<sub/>',
         '<sup>', '</sup>', '<sup/>',
         )
@@ -31,7 +30,6 @@ def html_to_xml(html_string):
     xml_string = html_string
     xml_string = replace_simple_tags(xml_string, 'i', 'italic')
     xml_string = replace_simple_tags(xml_string, 'b', 'bold')
-    xml_string = replace_simple_tags(xml_string, 'u', 'underline')
     # note: sub and sup tags are valid in HTML and XML so do not need to be replaced
     xml_string = escape_xml(xml_string)
     return xml_string
