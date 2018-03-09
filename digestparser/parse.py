@@ -15,7 +15,6 @@ def html_open_tag(style):
     style_map = {
         'italic': '<i>',
         'bold': '<b>',
-        'underline': '<u>',
         'subscript': '<sub>',
         'superscript': '<sup>'
     }
@@ -26,7 +25,6 @@ def html_close_tag(style):
     style_map = {
         'italic': '</i>',
         'bold': '</b>',
-        'underline': '</u>',
         'subscript': '</sub>',
         'superscript': '</sup>'
     }
@@ -93,7 +91,6 @@ def join_runs(runs):
     for run in runs:
         output = run_open_close_style(run, prev_run, output, 'italic')
         output = run_open_close_style(run, prev_run, output, 'bold')
-        output = run_open_close_style(run, prev_run, output, 'underline')
         output = run_open_close_style(run, prev_run, output, 'subscript')
         output = run_open_close_style(run, prev_run, output, 'superscript')
         output += run.text
