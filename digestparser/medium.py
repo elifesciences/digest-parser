@@ -64,11 +64,17 @@ def digest_medium_license(digest, digest_config={}):
     return medium_license
 
 
+def digest_medium_content_format(digest, digest_config={}):
+    "set the medium content format, typically html, or could be markdown"
+    content_format = None
+    if digest_config.get('medium_content_format'):
+        content_format = digest_config.get('medium_content_format')
+    return content_format
+
+
 def build_medium_content(file_name, config_section=None):
     "build Medium content from a DOCX input file"
     digest_config = parse_raw_config(raw_config(config_section))
-
-    content_format = 'html'
 
     # build the digest object
     digest = build_digest(file_name)
@@ -76,6 +82,7 @@ def build_medium_content(file_name, config_section=None):
     # convert to Medium content components
     title = digest_medium_title(digest)
     # todo!! pass in footer content
+    content_format = digest_medium_content_format(digest, digest_config)
     content = digest_medium_content(digest, digest_config)
     tags = digest_medium_tags(digest)
     # license
