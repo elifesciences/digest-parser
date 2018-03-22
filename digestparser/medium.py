@@ -56,11 +56,18 @@ def digest_medium_tags(digest):
     return digest.keywords
 
 
+def digest_medium_license(digest, digest_config={}):
+    "set the medium license"
+    medium_license = None
+    if digest_config.get('medium_license'):
+        medium_license = digest_config.get('medium_license')
+    return medium_license
+
+
 def build_medium_content(file_name, config_section=None):
     "build Medium content from a DOCX input file"
     digest_config = parse_raw_config(raw_config(config_section))
-    # todo - specify alternate license
-    medium_license = 'cc-40-by'
+
     content_format = 'html'
 
     # build the digest object
@@ -71,12 +78,16 @@ def build_medium_content(file_name, config_section=None):
     # todo!! pass in footer content
     content = digest_medium_content(digest, digest_config)
     tags = digest_medium_tags(digest)
+    # license
+    medium_license = digest_medium_license(digest, digest_config)
 
     # assemble the return value
     medium_content = OrderedDict()
     medium_content['title'] = title
     medium_content['contentFormat'] = content_format
     medium_content['content'] = content
-    medium_content['tags'] = tags
-    medium_content['license'] = medium_license
+    if tags:
+        medium_content['tags'] = tags
+    if medium_license:
+        medium_content['license'] = medium_license
     return medium_content
