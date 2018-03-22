@@ -29,17 +29,17 @@ def digest_formatter(digest_config, format_name, digest, content={}):
 def digest_medium_content(digest, digest_config={}):
     "extract converted Medium content from a digest object"
     # title
-    title = digest_formatter(digest_config, 'medium_title_format', digest)
+    title = digest_formatter(digest_config, 'medium_title_pattern', digest)
     # summary
-    summary = digest_formatter(digest_config, 'medium_summary_format', digest)
+    summary = digest_formatter(digest_config, 'medium_summary_pattern', digest)
     # body
     body = u''
     for text in digest.text:
         content = {'text': text}
         # convert text into paragraphs converting inline HTML tags
-        body += digest_formatter(digest_config, 'medium_paragraph_format', digest, content)
+        body += digest_formatter(digest_config, 'medium_paragraph_pattern', digest, content)
     # footer
-    footer = digest_formatter(digest_config, 'medium_footer_format', digest)
+    footer = digest_formatter(digest_config, 'medium_footer_pattern', digest)
     # format the final content medium_content
     content = {
         'title': title,
@@ -47,7 +47,7 @@ def digest_medium_content(digest, digest_config={}):
         'body': body,
         'footer': footer,
         }
-    medium_content = digest_formatter(digest_config, 'medium_content_format', digest, content)
+    medium_content = digest_formatter(digest_config, 'medium_content_pattern', digest, content)
     return medium_content
 
 
