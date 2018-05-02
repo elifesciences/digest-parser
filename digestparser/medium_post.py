@@ -109,13 +109,18 @@ def medium_post(medium_content, config_section=None):
         application_secret=digest_config.get('medium_application_client_secret'))
     medium_client.access_token = digest_config.get('medium_access_token')
     medium_user = medium_client.get_current_user()
-    # Create a draft post.
+    # Set some optional post values
+    publish_status = 'draft'
+    medium_license = digest_config.get('medium_license', None)
+
+    # Create a draft post
     post = medium_client.create_post(
         user_id=medium_user["id"],
         title=medium_content.get('title'),
         content=medium_content.get('content'),
         content_format=medium_content.get('contentFormat'),
-        publish_status="draft")
+        publish_status=publish_status,
+        license=medium_license)
 
 
 if __name__ == "__main__":
