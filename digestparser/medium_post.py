@@ -4,6 +4,7 @@ from collections import OrderedDict
 from digestparser.build import build_digest
 from digestparser.html import string_to_html
 from digestparser.conf import raw_config, parse_raw_config
+from medium import Client
 
 def digest_medium_title(digest):
     "extract converted Medium title from a digest object"
@@ -98,3 +99,28 @@ def build_medium_content(file_name, config_section=None):
     if medium_license:
         medium_content['license'] = medium_license
     return medium_content
+
+def medium_post(medium_content, config_section=None):
+    "post the Medium content to Medium"
+    digest_config = parse_raw_config(raw_config(config_section))
+
+    medium_client = Client(
+        application_id=digest_config.get('medium_application_client_id'),
+        application_secret=digest_config.get('medium_application_client_secret'))
+    medium_client.access_token = digest_config.get('medium_access_token')
+    medium_user = medium_client.get_current_user()
+    # Create a draft post.
+    post = medium_client.create_post(
+        user_id=medium_user["id"],
+        title=medium_content.get('title'),
+        content=medium_content.get('content'),
+        content_format=medium_content.get('contentFormat'),
+        publish_status="draft")
+
+
+if __name__ == "__main__":
+    "test while developing"
+    config_section = 'elife'
+    file_name = 'tests/test_data/DIGEST 99999.docx'
+    medium_content = build_medium_content(file_name, config_section)
+    medium_post(medium_content, config_section)
