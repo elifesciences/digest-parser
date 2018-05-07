@@ -100,7 +100,7 @@ def build_medium_content(file_name, config_section=None):
         medium_content['license'] = medium_license
     return medium_content
 
-def medium_post(medium_content, config_section=None):
+def post_content(medium_content, config_section=None):
     "post the Medium content to Medium"
     digest_config = parse_raw_config(raw_config(config_section))
 
@@ -128,4 +128,4 @@ if __name__ == "__main__":
     config_section = 'elife'
     file_name = 'tests/test_data/DIGEST 99999.docx'
     medium_content = build_medium_content(file_name, config_section)
-    medium_post(medium_content, config_section)
+    post_content(medium_content, config_section)
