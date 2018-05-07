@@ -121,6 +121,7 @@ def post_content(medium_content, config_section=None):
         content_format=medium_content.get('contentFormat'),
         publish_status=publish_status,
         license=medium_license)
+    return post
 
 
 if __name__ == "__main__":
