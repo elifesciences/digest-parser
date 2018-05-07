@@ -1,5 +1,6 @@
 from digestparser.parse import parse_content
 from digestparser.objects import Digest, Image
+from digestparser.zip import unzip_zip
 
 SECTION_MAP = {
     'title': '<b>DIGEST TITLE</b>',
@@ -73,7 +74,7 @@ def extract_image_content(content):
     license_value = second_parts[1].rstrip(' )')
     return caption, credit, license_value
 
-def build_image(content):
+def build_image(content, image_file_name=None):
     image_content = build_singleton('image', content)
     if not image_content:
         return None
@@ -83,13 +84,27 @@ def build_image(content):
     image_object.caption = caption
     image_object.credit = credit
     image_object.license = license_value
+    if image_file_name:
+        image_object.file = image_file_name
     return image_object
 
 
-def build_digest(file_name, image_file_name=None):
+def handle_zip(file_name, temp_dir):
+    "if the file is a zip, extract, otherwise just a docx"
+    docx_file_name = None
+    image_file_name = None
+    if file_name.endswith('.zip'):
+        docx_file_name, image_file_name = unzip_zip(file_name, temp_dir)
+    else:
+        docx_file_name = file_name
+    return docx_file_name, image_file_name
+
+
+def build_digest(file_name, temp_dir='tmp'):
     "build a digest object from a DOCX input file"
     digest = None
-    content = parse_content(file_name)
+    docx_file_name, image_file_name = handle_zip(file_name, temp_dir)
+    content = parse_content(docx_file_name)
     if content:
         digest = Digest()
         digest.title = build_title(content)
@@ -97,5 +112,5 @@ def build_digest(file_name, image_file_name=None):
         digest.keywords = build_keywords(content)
         digest.doi = build_doi(content)
         digest.text = build_text(content)
-        digest.image = build_image(content)
+        digest.image = build_image(content, image_file_name)
     return digest

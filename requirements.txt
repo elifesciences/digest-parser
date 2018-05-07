@@ -6,3 +6,4 @@ elifetools==0.1.8
 configparser==3.5.0
 git+https://github.com/Medium/medium-sdk-python.git@bdf34becf6dd24e3b1fc1048c36416bcba9fe0d6#egg=medium
 mock==1.3.0
+ddt==1.1.0
