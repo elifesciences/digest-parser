@@ -1,19 +1,30 @@
 # coding=utf-8
 
+import os
 import unittest
 from digestparser import build
 from tests import test_data_path
+from ddt import ddt, data
 
-
+@ddt
 class TestBuild(unittest.TestCase):
 
     def setUp(self):
         pass
 
-
-    def test_build_digest(self):
+    @data(
+        {
+            'file_name': 'DIGEST 99999.docx',
+            'image_file': None
+        },
+        {
+            'file_name': 'DIGEST 99999.zip',
+            'image_file': 'IMAGE 99999.jpeg'
+        }
+        )
+    def test_build_digest(self, test_data):
         "check building a digest object from a DOCX file"
-        docx_file = 'DIGEST 99999.docx'
+        file_name = test_data.get('file_name')
         # note: below after 'the' is a unicode non-breaking space character
         expected_title = u'Fishing for errors in the\xa0tests'
         expected_summary = u'Testing a document which mimics the format of a file we’ve used  before plus CO<sub>2</sub> and Ca<sup>2+</sup>.'
@@ -27,7 +38,7 @@ class TestBuild(unittest.TestCase):
         expected_image_credit = u'Anonymous and Anonymous'
         expected_image_license = u'CC BY 4.0'
         # build now
-        digest = build.build_digest(test_data_path(docx_file))
+        digest = build.build_digest(test_data_path(file_name))
         # assert assertions
         self.assertIsNotNone(digest)
         self.assertEqual(digest.title, expected_title)
@@ -42,6 +53,9 @@ class TestBuild(unittest.TestCase):
             self.assertEqual(digest.image.caption, expected_image_caption)
             self.assertEqual(digest.image.credit, expected_image_credit)
             self.assertEqual(digest.image.license, expected_image_license)
+            if test_data.get('image_file'):
+                expected_image_file = os.path.join('tmp', test_data.get('image_file'))
+                self.assertEqual(digest.image.file, expected_image_file)
 
     def test_build_singleton_blank_content(self):
         "test parsing from blank content for coverage"
