@@ -119,6 +119,7 @@ def post_content(medium_content, config_section=None):
         title=medium_content.get('title'),
         content=medium_content.get('content'),
         content_format=medium_content.get('contentFormat'),
+        tags=medium_content.get('tags'),
         publish_status=publish_status,
         license=medium_license)
     return post
