@@ -1,5 +1,6 @@
 "build JATS XML output from digest content"
 
+from elifetools import parseJATS as parser
 from digestparser.build import build_digest
 from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand
 from elifetools.utils_html import replace_simple_tags
@@ -42,6 +43,27 @@ def digest_jats(digest):
     for text in digest.text:
         jats_content += '<p>' + html_to_xml(text) + '</p>'
     return jats_content
+
+
+def split_paragraphs(string):
+    "split a string with paragraph tags into a list of lines"
+    if not string:
+        return string
+    content = []
+    for snippet in string.split('<p>'):
+        clean_snippet = snippet.rstrip()
+        if clean_snippet.endswith('</p>'):
+            clean_snippet = ''.join(clean_snippet.split('</p>')[0:-1])
+        if clean_snippet != '':
+            content.append(clean_snippet)
+    return content
+
+
+def parse_jats_digest(jats_file_name):
+    "extract the digest paragraphs from a jats file"
+    soup = parser.parse_document(jats_file_name)
+    jats_digest = parser.full_digest(soup)
+    return split_paragraphs(jats_digest)
 
 
 def build_jats(file_name):
