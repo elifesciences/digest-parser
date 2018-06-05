@@ -3,7 +3,7 @@
 import unittest
 from mock import patch
 from digestparser import medium_post
-from tests import read_fixture, test_data_path
+from tests import read_fixture, test_data_path, fixture_file
 
 
 class MockClient():
@@ -63,6 +63,19 @@ class TestMedium(unittest.TestCase):
         expected_medium_content = read_fixture('medium_content_99999.py')
         # build the digest object
         medium_content = medium_post.build_medium_content(test_data_path(docx_file), config_section)
+        # test assertions
+        self.assertEqual(medium_content, expected_medium_content)
+
+
+    def test_build_medium_content_with_jats(self):
+        "test building from a DOCX file and converting to Medium content"
+        config_section = 'elife'
+        docx_file = 'DIGEST 99999.docx'
+        jats_file = fixture_file('elife-99999-v0.xml')
+        expected_medium_content = read_fixture('medium_content_jats_99999.py')
+        # build the digest object
+        medium_content = medium_post.build_medium_content(
+            test_data_path(docx_file), config_section, jats_file)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 

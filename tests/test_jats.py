@@ -2,9 +2,11 @@
 
 import unittest
 from digestparser import jats
-from tests import read_fixture, test_data_path
+from tests import read_fixture, test_data_path, fixture_file
 from digestparser.objects import Digest
+from ddt import ddt, data
 
+@ddt
 class TestJats(unittest.TestCase):
 
     def setUp(self):
@@ -17,6 +19,14 @@ class TestJats(unittest.TestCase):
         expected_content = "<bold>A <italic>simple</italic> example</bold> to test &gt; 1 &amp; &lt;blink&gt;check&lt;/blink&gt;."
         xml_content = jats.html_to_xml(html_content)
         self.assertEqual(xml_content, expected_content)
+
+
+    def test_xml_to_html(self):
+        "test converting XML to HTML"
+        xml_content = "<bold>A <italic>simple</italic> example</bold> to test &gt; 1 &amp; <blink>check</blink>."
+        expected_content = "<b>A <i>simple</i> example</b> to test &gt; 1 &amp; &lt;blink&gt;check&lt;/blink&gt;."
+        html_content = jats.xml_to_html(xml_content)
+        self.assertEqual(html_content, expected_content)
 
 
     def test_digest_jats(self):
@@ -37,6 +47,29 @@ class TestJats(unittest.TestCase):
         expected_content = read_fixture('jats_content_99999.txt').decode('utf-8')
         jats_content = jats.build_jats(test_data_path(docx_file))
         self.assertEqual(jats_content, expected_content)
+
+
+    @data(
+        {
+            'string': None,
+            'expected': None
+        },
+        {
+            'string': '<p>One</p><p><italic>Two</italic></p>',
+            'expected': ['One', '<italic>Two</italic>']
+        }
+        )
+    def test_split_paragraphs(self, test_data):
+        "check building JATS XML content from a DOCX file"
+        content = jats.split_paragraphs(test_data.get('string'))
+        self.assertEqual(content, test_data.get('expected'))
+
+
+    def test_parse_jats_digest(self):
+        "extract text content from a JATS file abstract digest"
+        content = jats.parse_jats_digest(fixture_file('elife-99999-v0.xml'))
+        expected_content = read_fixture('elife_99999_v0_digest.py')
+        self.assertEqual(content, expected_content)
 
 
 if __name__ == '__main__':
