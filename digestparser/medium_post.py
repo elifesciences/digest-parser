@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 from digestparser.build import build_digest
+from digestparser.jats import parse_jats_digest, xml_to_html
 from digestparser.html import string_to_html
 from digestparser.conf import raw_config, parse_raw_config
 from medium import Client
@@ -73,12 +74,18 @@ def digest_medium_content_format(digest, digest_config={}):
     return content_format
 
 
-def build_medium_content(file_name, config_section=None):
+def build_medium_content(file_name, config_section=None, jats_file_name=None):
     "build Medium content from a DOCX input file"
     digest_config = parse_raw_config(raw_config(config_section))
 
     # build the digest object
     digest = build_digest(file_name)
+
+    # override the text with the jats file digest content
+    if jats_file_name:
+        jats_content = parse_jats_digest(jats_file_name)
+        if jats_content:
+            digest.text = map(xml_to_html, jats_content)
 
     # convert to Medium content components
     title = digest_medium_title(digest)

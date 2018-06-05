@@ -15,6 +15,8 @@ def allowed_xml_tag_fragments():
     return (
         '<italic>', '</italic>','<italic/>',
         '<bold>', '</bold>', '<bold/>',
+        '<i>', '</i>','<i/>',
+        '<b>', '</b>', '<b/>',
         '<sub>', '</sub>', '<sub/>',
         '<sup>', '</sup>', '<sup/>',
         )
@@ -34,6 +36,15 @@ def html_to_xml(html_string):
     # note: sub and sup tags are valid in HTML and XML so do not need to be replaced
     xml_string = escape_xml(xml_string)
     return xml_string
+
+
+def xml_to_html(xml_string):
+    "convert XML style content to HTML style tagging"
+    html_string = xml_string
+    html_string = replace_simple_tags(html_string, 'italic', 'i')
+    html_string = replace_simple_tags(html_string, 'bold', 'b')
+    html_string = escape_xml(html_string)
+    return html_string
 
 
 def digest_jats(digest):

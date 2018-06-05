@@ -21,6 +21,14 @@ class TestJats(unittest.TestCase):
         self.assertEqual(xml_content, expected_content)
 
 
+    def test_xml_to_html(self):
+        "test converting XML to HTML"
+        xml_content = "<bold>A <italic>simple</italic> example</bold> to test &gt; 1 &amp; <blink>check</blink>."
+        expected_content = "<b>A <i>simple</i> example</b> to test &gt; 1 &amp; &lt;blink&gt;check&lt;/blink&gt;."
+        html_content = jats.xml_to_html(xml_content)
+        self.assertEqual(html_content, expected_content)
+
+
     def test_digest_jats(self):
         "simple test to convert digest text to JATS XML content"
         digest = Digest()
