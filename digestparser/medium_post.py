@@ -1,5 +1,6 @@
 "compose a Medium post from digest content"
 
+import os
 from collections import OrderedDict
 from digestparser.build import build_digest
 from digestparser.jats import parse_jats_digest, xml_to_html
@@ -24,8 +25,59 @@ def digest_formatter(digest_config, format_name, digest, content={}):
             title=content.get('title'),
             summary=content.get('summary'),
             body=content.get('body'),
-            footer=content.get('footer'))
+            footer=content.get('footer'),
+            figure=content.get('figure')
+            )
     return string
+
+
+def image_formatter(digest_config, format_name, image, content={}):
+    "take a format from the config file and convert it to a string using image attributes"
+    string = u''
+    if digest_config.get(format_name):
+        string = digest_config.get(format_name).format(
+            image_url=content.get('image_url'),
+            figcaption=content.get('figcaption'),
+            caption=content.get('caption'),
+            credit=content.get('credit'),
+            license=content.get('license'),
+            file_name=content.get('file_name')
+            )
+    return string
+
+
+def digest_figure_license(digest_config, image):
+    "license text used in the figure caption"
+    license_content = ''
+    if image.license:
+        license_content = ' (' + image.license + ')'
+    return license_content 
+
+def digest_figure_caption_content(digest_config, image):
+    "figure caption based on the pattern in the config file"
+    content = {
+        'caption': image.caption + ' ',
+        'credit': image.credit,
+        'license': digest_figure_license(digest_config, image)
+        }
+    return image_formatter(digest_config, 'medium_figcaption_pattern', image, content)
+
+
+def digest_figure_image_url(digest_config, image):
+    "image url based on the image object file attribute"
+    content = {
+        'file_name': os.path.split(image.file)[-1]
+        }
+    return image_formatter(digest_config, 'medium_image_url', image, content)
+
+
+def digest_figure_content(digest_config, image):
+    "create figure content from the image object using the formatting in the config"
+    content = {
+        'image_url': digest_figure_image_url(digest_config, image),
+        'figcaption': digest_figure_caption_content(digest_config, image)
+        }
+    return image_formatter(digest_config, 'medium_figure_pattern', image, content)
 
 
 def digest_medium_content(digest, digest_config={}):
@@ -42,8 +94,13 @@ def digest_medium_content(digest, digest_config={}):
         body += digest_formatter(digest_config, 'medium_paragraph_pattern', digest, content)
     # footer
     footer = digest_formatter(digest_config, 'medium_footer_pattern', digest)
+    # figure
+    figure = u''
+    if digest.image and digest.image.file:
+        figure = digest_figure_content(digest_config, digest.image)
     # format the final content medium_content
     content = {
+        'figure': figure,
         'title': title,
         'summary': summary,
         'body': body,
@@ -135,6 +192,7 @@ def post_content(medium_content, config_section=None):
 if __name__ == "__main__":
     "test while developing"
     config_section = 'elife'
-    file_name = 'tests/test_data/DIGEST 99999.docx'
+    #file_name = 'tests/test_data/DIGEST 99999.docx'
+    file_name = 'tests/test_data/DIGEST 99999.zip'
     medium_content = build_medium_content(file_name, config_section)
     post_content(medium_content, config_section)
