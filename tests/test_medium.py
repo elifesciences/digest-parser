@@ -2,6 +2,8 @@
 
 import unittest
 from mock import patch
+from digestparser.conf import raw_config, parse_raw_config
+from digestparser.objects import Image
 from digestparser import medium_post
 from tests import read_fixture, test_data_path, fixture_file
 
@@ -53,8 +55,49 @@ class TestMockClient(unittest.TestCase):
 class TestMedium(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.digest_config = parse_raw_config(raw_config('elife'))
 
+    def build_image(self, caption=None, credit=None, license_value=None, file_value=None):
+        "build an Image object for testing"
+        image = Image()
+        if caption:
+            image.caption = caption
+        if credit:
+            image.credit = credit
+        if license_value:
+            image.license = license_value
+        if file_value:
+            image.file = file_value
+        return image
+
+    def test_digest_figure_license(self):
+        "test figure license content formatting"
+        image = self.build_image(license_value=u'CC BY\xa04.0')
+        expected = u' (CC BY\xa04.0)'
+        self.assertEqual(medium_post.digest_figure_license(self.digest_config, image), expected)
+
+    def test_digest_figure_caption_content(self):
+        "test figure caption content formatting"
+        image = self.build_image(
+            caption='Caption.', credit='Anonymous', license_value=u'CC BY\xa04.0', file_value='')
+        expected = u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption>'
+        self.assertEqual(medium_post.digest_figure_caption_content(
+            self.digest_config, image), expected)
+
+    def test_digest_figure_image_url(self):
+        "test figure image url formatting"
+        image = self.build_image(file_value='test.jpg')
+        expected = u'https://cdn.elifesciences.org/digest/test.jpg'
+        self.assertEqual(medium_post.digest_figure_image_url(
+            self.digest_config, image), expected)
+
+    def test_digest_figure_content(self):
+        "test figure caption formatting"
+        image = self.build_image(
+            caption='Caption.', credit='Anonymous', license_value=u'CC BY\xa04.0', file_value='test.jpg')
+        expected = u'<figure><img src="https://cdn.elifesciences.org/digest/test.jpg" /><figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>'
+        self.assertEqual(medium_post.digest_figure_content(
+            self.digest_config, image), expected)
 
     def test_build_medium_content(self):
         "test building from a DOCX file and converting to Medium content"
@@ -70,7 +113,7 @@ class TestMedium(unittest.TestCase):
     def test_build_medium_content_with_jats(self):
         "test building from a DOCX file and converting to Medium content"
         config_section = 'elife'
-        docx_file = 'DIGEST 99999.docx'
+        docx_file = 'DIGEST 99999.zip'
         jats_file = fixture_file('elife-99999-v0.xml')
         expected_medium_content = read_fixture('medium_content_jats_99999.py')
         # build the digest object
