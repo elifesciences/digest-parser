@@ -87,7 +87,7 @@ class TestMedium(unittest.TestCase):
     def test_digest_figure_image_url(self):
         "test figure image url formatting"
         image = self.build_image(file_value='test.jpg')
-        expected = u'https://cdn.elifesciences.org/medium_test/test.jpg'
+        expected = u'https://cdn.elifesciences.org/digest/test.jpg'
         self.assertEqual(medium_post.digest_figure_image_url(
             self.digest_config, image), expected)
 
@@ -95,7 +95,7 @@ class TestMedium(unittest.TestCase):
         "test figure caption formatting"
         image = self.build_image(
             caption='Caption.', credit='Anonymous', license_value=u'CC BY\xa04.0', file_value='test.jpg')
-        expected = u'<figure><img src="https://cdn.elifesciences.org/medium_test/test.jpg" /><figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>'
+        expected = u'<figure><img src="https://cdn.elifesciences.org/digest/test.jpg" /><figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>'
         self.assertEqual(medium_post.digest_figure_content(
             self.digest_config, image), expected)
 
