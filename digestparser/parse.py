@@ -85,16 +85,23 @@ def run_open_close_style(run, prev_run, output, attr):
         attr=attr
     )
 
+def join_run_tags(run, prev_run, output=''):
+    "process all the possible tags in the run"
+    output = run_open_close_style(run, prev_run, output, 'italic')
+    output = run_open_close_style(run, prev_run, output, 'bold')
+    output = run_open_close_style(run, prev_run, output, 'subscript')
+    output = run_open_close_style(run, prev_run, output, 'superscript')
+    return output
+
 def join_runs(runs):
     output = ''
     prev_run = None
     for run in runs:
-        output = run_open_close_style(run, prev_run, output, 'italic')
-        output = run_open_close_style(run, prev_run, output, 'bold')
-        output = run_open_close_style(run, prev_run, output, 'subscript')
-        output = run_open_close_style(run, prev_run, output, 'superscript')
+        output = join_run_tags(run, prev_run, output)
         output += run.text
         prev_run = run
+    # finish up by running one last time with prev_run
+    output = join_run_tags('', prev_run, output)
     return output
 
 if __name__ == "__main__":
