@@ -11,6 +11,7 @@ SECTION_MAP = {
     'image': '<b>IMAGE CREDIT</b>',
 }
 
+
 def extract_section_content(section_name, content):
     "scan the content finding the content for the particular section"
     section_content = []
@@ -29,6 +30,7 @@ def extract_section_content(section_name, content):
                 break
     return section_content
 
+
 def build_singleton(section_name, content):
     "extract the content section and return a single value"
     section_content = extract_section_content(section_name, content)
@@ -36,30 +38,35 @@ def build_singleton(section_name, content):
         return None
     return section_content[0]
 
+
 def build_list(section_name, content):
     "extract the content and return a list of values"
     return extract_section_content(section_name, content)
 
+
 def build_title(content):
     return build_singleton('title', content)
+
 
 def build_summary(content):
     return build_singleton('summary', content)
 
+
 def build_keywords(content):
-    keywords = []
     raw_keywords = build_singleton('keywords', content)
     if raw_keywords:
         # split the comma separated keywords and strip whitespace
         return [key.lstrip().rstrip() for key in raw_keywords.split(',')]
-    else:
-        return raw_keywords
+    return raw_keywords
+
 
 def build_doi(content):
     return build_singleton('doi', content)
 
+
 def build_text(content):
     return build_list('text', content)
+
 
 def extract_image_content(content):
     caption = None
@@ -73,6 +80,7 @@ def extract_image_content(content):
     credit = second_parts[0].lstrip().rstrip()
     license_value = second_parts[1].rstrip(' )')
     return caption, credit, license_value
+
 
 def build_image(content, image_file_name=None):
     image_content = build_singleton('image', content)
