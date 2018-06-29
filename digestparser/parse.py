@@ -44,20 +44,20 @@ def run_contains_break(run):
     return bool(run.text.endswith("\n") if run is not None else False)
 
 
-def run_has_attr(run, attr):
+def run_has_attr(run, attribute):
     "check if a run has an attribute, for checking bold or italic for example"
     if not run:
         return None
     try:
-        return getattr(run, attr)
+        return getattr(run, attribute)
     except AttributeError:
         # look at the font attribute if an AttributeError is thrown
-        return getattr(run.font, attr)
+        return getattr(run.font, attribute)
 
 
-def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, attr):
+def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, attribute):
     "open and close tags to include between two strings based on their attributes"
-    open_tag, close_tag = html_open_close_tag(style=attr)
+    open_tag, close_tag = html_open_close_tag(style=attribute)
     if not open_tag or not close_tag:
         return output
     # add the close tag first
@@ -80,15 +80,15 @@ def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, att
     return output
 
 
-def run_open_close_style(run, prev_run, output, attr):
+def run_open_close_style(run, prev_run, output, attribute):
     "open and close tags to include between runs"
     # extract run object data for the more general purpose function
     return open_close_style(
-        one_has_attr=run_has_attr(prev_run, attr),
-        two_has_attr=run_has_attr(run, attr),
+        one_has_attr=run_has_attr(prev_run, attribute),
+        two_has_attr=run_has_attr(run, attribute),
         one_contains_break=run_contains_break(prev_run),
         output=output,
-        attr=attr
+        attribute=attribute
     )
 
 
