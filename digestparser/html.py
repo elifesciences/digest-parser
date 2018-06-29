@@ -1,7 +1,7 @@
 "convert parsed content to HTML"
 
 from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand
-from elifetools.utils_html import replace_simple_tags
+
 
 def allowed_xml_tag_fragments():
     """
@@ -11,7 +11,7 @@ def allowed_xml_tag_fragments():
     such as the case would be for mml: or table td tags
     """
     return (
-        '<i>', '</i>','<i/>',
+        '<i>', '</i>', '<i/>',
         '<b>', '</b>', '<b/>',
         '<sub>', '</sub>', '<sub/>',
         '<sup>', '</sup>', '<sup/>',

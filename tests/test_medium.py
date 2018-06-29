@@ -8,13 +8,18 @@ from digestparser import medium_post
 from tests import read_fixture, test_data_path, fixture_file
 
 
-class MockClient():
+class MockClient(object):
     "mock Medium client to use in testing"
+    def __new__(cls, create_post_return=None):
+        new_instance = object.__new__(cls)
+        new_instance.__init__(create_post_return)
+        return new_instance
+
     def __init__(self, create_post_return=None):
         self.access_token = None
         # default data returned
         if create_post_return is not None:
-            self.create_post_return=create_post_return
+            self.create_post_return = create_post_return
         else:
             self.create_post_return = {
                 'canonicalUrl': '',
@@ -28,12 +33,21 @@ class MockClient():
                 }
 
     def get_current_user(self):
-        user = {}
-        user['id'] = None
-        return user
+        return {'id': None}
 
     def create_post(self, user_id, title, content, content_format, tags=None,
                     canonical_url=None, publish_status=None, license=None):
+        "mock the create_post of the medium Client"
+        # use all the variables to satisfy the linter self-use directive
+        user_id = user_id
+        title = title
+        content = content
+        content_format = content_format
+        tags = tags
+        canonical_url = canonical_url
+        publish_status = publish_status
+        license = license
+        # now can return the data
         return self.create_post_return
 
 
@@ -52,33 +66,34 @@ class TestMockClient(unittest.TestCase):
         self.assertEqual(post, create_post_return)
 
 
-class TestMedium(unittest.TestCase):
+def build_image(caption=None, credit=None, license_value=None, file_value=None):
+    "build an Image object for testing"
+    image = Image()
+    if caption:
+        image.caption = caption
+    if credit:
+        image.credit = credit
+    if license_value:
+        image.license = license_value
+    if file_value:
+        image.file = file_value
+    return image
+
+
+class TestMediumFigure(unittest.TestCase):
 
     def setUp(self):
         self.digest_config = parse_raw_config(raw_config('elife'))
 
-    def build_image(self, caption=None, credit=None, license_value=None, file_value=None):
-        "build an Image object for testing"
-        image = Image()
-        if caption:
-            image.caption = caption
-        if credit:
-            image.credit = credit
-        if license_value:
-            image.license = license_value
-        if file_value:
-            image.file = file_value
-        return image
-
     def test_digest_figure_license(self):
         "test figure license content formatting"
-        image = self.build_image(license_value=u'CC BY\xa04.0')
+        image = build_image(license_value=u'CC BY\xa04.0')
         expected = u' (CC BY\xa04.0)'
-        self.assertEqual(medium_post.digest_figure_license(self.digest_config, image), expected)
+        self.assertEqual(medium_post.digest_figure_license(image), expected)
 
     def test_digest_figure_caption_content(self):
         "test figure caption content formatting"
-        image = self.build_image(
+        image = build_image(
             caption='Caption.', credit='Anonymous', license_value=u'CC BY\xa04.0', file_value='')
         expected = u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption>'
         self.assertEqual(medium_post.digest_figure_caption_content(
@@ -86,16 +101,18 @@ class TestMedium(unittest.TestCase):
 
     def test_digest_figure_image_url(self):
         "test figure image url formatting"
-        image = self.build_image(file_value='test.jpg')
+        image = build_image(file_value='test.jpg')
         expected = u'https://cdn.elifesciences.org/digest/test.jpg'
         self.assertEqual(medium_post.digest_figure_image_url(
             self.digest_config, image), expected)
 
     def test_digest_figure_content(self):
         "test figure caption formatting"
-        image = self.build_image(
-            caption='Caption.', credit='Anonymous', license_value=u'CC BY\xa04.0', file_value='test.jpg')
-        expected = u'<figure><img src="https://cdn.elifesciences.org/digest/test.jpg" /><figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>'
+        image = build_image(
+            caption='Caption.', credit='Anonymous',
+            license_value=u'CC BY\xa04.0', file_value='test.jpg')
+        expected = (u'<figure><img src="https://cdn.elifesciences.org/digest/test.jpg" />' +
+                    u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>')
         self.assertEqual(medium_post.digest_figure_content(
             self.digest_config, image), expected)
 
@@ -105,10 +122,10 @@ class TestMedium(unittest.TestCase):
         docx_file = 'DIGEST 99999.docx'
         expected_medium_content = read_fixture('medium_content_99999.py')
         # build the digest object
-        medium_content = medium_post.build_medium_content(test_data_path(docx_file), config_section)
+        medium_content = medium_post.build_medium_content(test_data_path(docx_file),
+                                                          config_section)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
-
 
     def test_build_medium_content_with_jats(self):
         "test building from a DOCX file and converting to Medium content"
@@ -122,18 +139,21 @@ class TestMedium(unittest.TestCase):
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 
-
     @patch.object(medium_post, 'Client')
     def test_post_content(self, fake_client):
         "test posting content to Medium mocking the endpoint"
         fake_client.return_value = MockClient()
-        config_section = 'elife'
-        medium_content = {}
+        medium_content = None
         # do the action
         post = medium_post.post_content(medium_content)
         # test assertions
         self.assertEqual(post.get('publishStatus'), 'draft')
 
+    def test_image_formatter(self):
+        "test image formatter for coverage"
+        expected = '<figcaption></figcaption>'
+        string = medium_post.image_formatter(self.digest_config, 'medium_figcaption_pattern')
+        self.assertEqual(string, expected)
 
 
 if __name__ == '__main__':

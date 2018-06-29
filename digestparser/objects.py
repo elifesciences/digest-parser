@@ -2,15 +2,16 @@
 Digest object definitions
 """
 
+
 class Digest(object):
     "Digest object"
 
     def __new__(cls):
         new_instance = object.__new__(cls)
-        new_instance.init()
+        new_instance.__init__()
         return new_instance
 
-    def init(self):
+    def __init__(self):
         self.title = None
         self.summary = None
         self.keywords = []
@@ -24,10 +25,10 @@ class Image(object):
 
     def __new__(cls):
         new_instance = object.__new__(cls)
-        new_instance.init()
+        new_instance.__init__()
         return new_instance
 
-    def init(self):
+    def __init__(self):
         self.caption = None
         self.credit = None
         self.license = None

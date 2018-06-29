@@ -1,9 +1,10 @@
 "build JATS XML output from digest content"
 
 from elifetools import parseJATS as parser
-from digestparser.build import build_digest
 from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand
 from elifetools.utils_html import replace_simple_tags
+from digestparser.build import build_digest
+
 
 def allowed_xml_tag_fragments():
     """
@@ -13,9 +14,9 @@ def allowed_xml_tag_fragments():
     such as the case would be for mml: or table td tags
     """
     return (
-        '<italic>', '</italic>','<italic/>',
+        '<italic>', '</italic>', '<italic/>',
         '<bold>', '</bold>', '<bold/>',
-        '<i>', '</i>','<i/>',
+        '<i>', '</i>', '<i/>',
         '<b>', '</b>', '<b/>',
         '<sub>', '</sub>', '<sub/>',
         '<sup>', '</sup>', '<sup/>',
