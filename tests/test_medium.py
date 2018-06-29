@@ -74,7 +74,7 @@ class TestMedium(unittest.TestCase):
         "test figure license content formatting"
         image = self.build_image(license_value=u'CC BY\xa04.0')
         expected = u' (CC BY\xa04.0)'
-        self.assertEqual(medium_post.digest_figure_license(self.digest_config, image), expected)
+        self.assertEqual(medium_post.digest_figure_license(image), expected)
 
     def test_digest_figure_caption_content(self):
         "test figure caption content formatting"
@@ -134,6 +134,11 @@ class TestMedium(unittest.TestCase):
         # test assertions
         self.assertEqual(post.get('publishStatus'), 'draft')
 
+    def test_image_formatter(self):
+        "test image formatter for coverage"
+        expected = '<figcaption></figcaption>'
+        string = medium_post.image_formatter(self.digest_config, 'medium_figcaption_pattern')
+        self.assertEqual(string, expected)
 
 
 if __name__ == '__main__':

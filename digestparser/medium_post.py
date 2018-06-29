@@ -2,18 +2,20 @@
 
 import os
 from collections import OrderedDict
+from medium import Client
 from digestparser.build import build_digest
 from digestparser.jats import parse_jats_digest, xml_to_html
 from digestparser.html import string_to_html
 from digestparser.conf import raw_config, parse_raw_config
-from medium import Client
+import digestparser.utils as utils
+
 
 def digest_medium_title(digest):
     "extract converted Medium title from a digest object"
     return string_to_html(digest.title)
 
 
-def digest_formatter(digest_config, format_name, digest, content={}):
+def digest_formatter(digest_config, format_name, digest, content=None):
     "take a format from the config file and convert it to a string using digest attributes"
     string = u''
     if digest_config.get(format_name):
@@ -21,46 +23,47 @@ def digest_formatter(digest_config, format_name, digest, content={}):
             digest_title=string_to_html(digest.title),
             digest_summary=string_to_html(digest.summary),
             digest_doi=digest.doi,
-            text=string_to_html(content.get('text')),
-            title=content.get('title'),
-            summary=content.get('summary'),
-            body=content.get('body'),
-            footer=content.get('footer'),
-            figure=content.get('figure')
+            text=string_to_html(utils.formatter_string(content, 'text')),
+            title=utils.formatter_string(content, 'title'),
+            summary=utils.formatter_string(content, 'summary'),
+            body=utils.formatter_string(content, 'body'),
+            footer=utils.formatter_string(content, 'footer'),
+            figure=utils.formatter_string(content, 'figure')
             )
     return string
 
 
-def image_formatter(digest_config, format_name, image, content={}):
+def image_formatter(digest_config, format_name, content=None):
     "take a format from the config file and convert it to a string using image attributes"
     string = u''
     if digest_config.get(format_name):
         string = digest_config.get(format_name).format(
-            image_url=content.get('image_url'),
-            figcaption=content.get('figcaption'),
-            caption=content.get('caption'),
-            credit=content.get('credit'),
-            license=content.get('license'),
-            file_name=content.get('file_name')
+            image_url=utils.formatter_string(content, 'image_url'),
+            figcaption=utils.formatter_string(content, 'figcaption'),
+            caption=utils.formatter_string(content, 'caption'),
+            credit=utils.formatter_string(content, 'credit'),
+            license=utils.formatter_string(content, 'license'),
+            file_name=utils.formatter_string(content, 'file_name')
             )
     return string
 
 
-def digest_figure_license(digest_config, image):
+def digest_figure_license(image):
     "license text used in the figure caption"
     license_content = ''
     if image.license:
         license_content = ' (' + image.license + ')'
-    return license_content 
+    return license_content
+
 
 def digest_figure_caption_content(digest_config, image):
     "figure caption based on the pattern in the config file"
     content = {
         'caption': image.caption + ' ',
         'credit': image.credit,
-        'license': digest_figure_license(digest_config, image)
+        'license': digest_figure_license(image)
         }
-    return image_formatter(digest_config, 'medium_figcaption_pattern', image, content)
+    return image_formatter(digest_config, 'medium_figcaption_pattern', content)
 
 
 def digest_figure_image_url(digest_config, image):
@@ -68,7 +71,7 @@ def digest_figure_image_url(digest_config, image):
     content = {
         'file_name': os.path.split(image.file)[-1]
         }
-    return image_formatter(digest_config, 'medium_image_url', image, content)
+    return image_formatter(digest_config, 'medium_image_url', content)
 
 
 def digest_figure_content(digest_config, image):
@@ -77,10 +80,10 @@ def digest_figure_content(digest_config, image):
         'image_url': digest_figure_image_url(digest_config, image),
         'figcaption': digest_figure_caption_content(digest_config, image)
         }
-    return image_formatter(digest_config, 'medium_figure_pattern', image, content)
+    return image_formatter(digest_config, 'medium_figure_pattern', content)
 
 
-def digest_medium_content(digest, digest_config={}):
+def digest_medium_content(digest, digest_config=None):
     "extract converted Medium content from a digest object"
     # title
     title = digest_formatter(digest_config, 'medium_title_pattern', digest)
@@ -115,18 +118,18 @@ def digest_medium_tags(digest):
     return digest.keywords
 
 
-def digest_medium_license(digest, digest_config={}):
+def digest_medium_license(digest_config):
     "set the medium license"
     medium_license = None
-    if digest_config.get('medium_license'):
+    if digest_config and digest_config.get('medium_license'):
         medium_license = digest_config.get('medium_license')
     return medium_license
 
 
-def digest_medium_content_format(digest, digest_config={}):
+def digest_medium_content_format(digest_config):
     "set the medium content format, typically html, or could be markdown"
     content_format = None
-    if digest_config.get('medium_content_format'):
+    if digest_config and digest_config.get('medium_content_format'):
         content_format = digest_config.get('medium_content_format')
     return content_format
 
@@ -147,11 +150,11 @@ def build_medium_content(file_name, config_section=None, jats_file_name=None):
     # convert to Medium content components
     title = digest_medium_title(digest)
     # todo!! pass in footer content
-    content_format = digest_medium_content_format(digest, digest_config)
+    content_format = digest_medium_content_format(digest_config)
     content = digest_medium_content(digest, digest_config)
     tags = digest_medium_tags(digest)
     # license
-    medium_license = digest_medium_license(digest, digest_config)
+    medium_license = digest_medium_license(digest_config)
 
     # assemble the return value
     medium_content = OrderedDict()
@@ -163,6 +166,7 @@ def build_medium_content(file_name, config_section=None, jats_file_name=None):
     if medium_license:
         medium_content['license'] = medium_license
     return medium_content
+
 
 def post_content(medium_content, config_section=None):
     "post the Medium content to Medium"
@@ -190,9 +194,9 @@ def post_content(medium_content, config_section=None):
 
 
 if __name__ == "__main__":
-    "test while developing"
-    config_section = 'elife'
-    #file_name = 'tests/test_data/DIGEST 99999.docx'
-    file_name = 'tests/test_data/DIGEST 99999.zip'
-    medium_content = build_medium_content(file_name, config_section)
-    post_content(medium_content, config_section)
+    # test while developing
+    CONFIG_SECTION = 'elife'
+    # file_name = 'tests/test_data/DIGEST 99999.docx'
+    FILE_NAME = 'tests/test_data/DIGEST 99999.zip'
+    MEDIUM_CONTENT = build_medium_content(FILE_NAME, CONFIG_SECTION)
+    post_content(MEDIUM_CONTENT, CONFIG_SECTION)
