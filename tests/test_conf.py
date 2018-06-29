@@ -3,7 +3,14 @@
 import unittest
 import configparser as configparser
 from digestparser import conf
-from tests import test_data_path
+
+
+def build_raw_config_for_testing(value_name, value):
+    "build a config object with one value and return the defaults for testing"
+    config = configparser.ConfigParser(interpolation=None)
+    config['DEFAULT'][value_name] = value
+    raw_config = config['DEFAULT']
+    return raw_config
 
 
 class TestConf(unittest.TestCase):
@@ -15,16 +22,7 @@ class TestConf(unittest.TestCase):
         self.int_value = '42'
         self.int_expected = 42
         self.list_value = '[1,1,2,3,5]'
-        self.list_expected = [1,1,2,3,5]
-
-
-    def build_raw_config_for_testing(self, value_name, value):
-        "build a config object with one value and return the defaults for testing"
-        config = configparser.ConfigParser(interpolation=None)
-        config['DEFAULT'][value_name] = value
-        raw_config = config['DEFAULT']
-        return raw_config
-
+        self.list_expected = [1, 1, 2, 3, 5]
 
     def test_load_config(self):
         "check building default configuration"
@@ -32,39 +30,34 @@ class TestConf(unittest.TestCase):
         self.assertIsNotNone(config)
         self.assertGreater(len(config.sections()), 0)
 
-
     def test_raw_config_none(self):
         "check reading raw config default when the config section is None"
         config = conf.raw_config(None)
         self.assertGreater(len(config), 0)
-
 
     def test_boolean_config(self):
         "test parsing a boolean value"
         value = self.boolean_value
         value_name = 'test'
         expected = self.boolean_expected
-        raw_config = self.build_raw_config_for_testing(value_name, value)
+        raw_config = build_raw_config_for_testing(value_name, value)
         self.assertEqual(conf.boolean_config(raw_config, value_name), expected)
-
 
     def test_int_config(self):
         "test parsing an int value"
         value = self.int_value
         value_name = 'test'
         expected = self.int_expected
-        raw_config = self.build_raw_config_for_testing(value_name, value)
+        raw_config = build_raw_config_for_testing(value_name, value)
         self.assertEqual(conf.int_config(raw_config, value_name), expected)
-
 
     def test_list_config(self):
         "test parsing a list value"
         value = self.list_value
         value_name = 'test'
         expected = self.list_expected
-        raw_config = self.build_raw_config_for_testing(value_name, value)
+        raw_config = build_raw_config_for_testing(value_name, value)
         self.assertEqual(conf.list_config(raw_config, value_name), expected)
-
 
     def test_parse_raw_config(self):
         "test parsing a raw config of all the different value types"
