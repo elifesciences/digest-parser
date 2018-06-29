@@ -184,10 +184,10 @@ def post_content(medium_content, config_section=None):
     # Create a draft post
     post = medium_client.create_post(
         user_id=medium_user["id"],
-        title=medium_content.get('title'),
-        content=medium_content.get('content'),
-        content_format=medium_content.get('contentFormat'),
-        tags=medium_content.get('tags'),
+        title=utils.formatter_string(medium_content, 'title'),
+        content=utils.formatter_string(medium_content, 'content'),
+        content_format=utils.formatter_string(medium_content, 'contentFormat'),
+        tags=utils.formatter_string(medium_content, 'tags'),
         publish_status=publish_status,
         license=medium_license)
     return post
