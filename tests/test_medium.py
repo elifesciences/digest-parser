@@ -3,7 +3,7 @@
 import unittest
 from mock import patch
 from digestparser.conf import raw_config, parse_raw_config
-from digestparser.objects import Image
+from digestparser.objects import Image, Digest
 from digestparser import medium_post
 from tests import read_fixture, test_data_path, fixture_file
 
@@ -102,19 +102,26 @@ class TestMediumFigure(unittest.TestCase):
     def test_digest_figure_image_url(self):
         "test figure image url formatting"
         image = build_image(file_value='test.jpg')
-        expected = u'https://cdn.elifesciences.org/digest/test.jpg'
+        digest = Digest()
+        digest.doi = '10.7554/eLife.99999'
+        expected = (
+            u'https://iiif.elifesciences.org/digests:99999%2Ftest.jpg/full/full/0/default.jpg')
         self.assertEqual(medium_post.digest_figure_image_url(
-            self.digest_config, image), expected)
+            self.digest_config, image, digest), expected)
 
     def test_digest_figure_content(self):
         "test figure caption formatting"
         image = build_image(
             caption='Caption.', credit='Anonymous',
             license_value=u'CC BY\xa04.0', file_value='test.jpg')
-        expected = (u'<figure><img src="https://cdn.elifesciences.org/digest/test.jpg" />' +
-                    u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>')
+        digest = Digest()
+        digest.doi = '10.7554/eLife.99999'
+        expected = (
+            u'<figure>' +
+            u'<img src="https://iiif.elifesciences.org/digests:99999%2Ftest.jpg/full/full/0/default.jpg" />' +
+            u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>')
         self.assertEqual(medium_post.digest_figure_content(
-            self.digest_config, image), expected)
+            self.digest_config, image, digest), expected)
 
     def test_build_medium_content(self):
         "test building from a DOCX file and converting to Medium content"
