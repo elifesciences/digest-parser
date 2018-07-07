@@ -1,5 +1,6 @@
 "utility helper functions"
 import re
+import urllib
 
 
 def sanitise(file_name):
@@ -18,3 +19,20 @@ def formatter_string(content, attribute):
     if not content:
         return ''
     return content.get(attribute) if content.get(attribute) else ''
+
+
+def msid_from_doi(doi):
+    "return just the id portion of the doi"
+    try:
+        msid = int(doi.split(".")[-1])
+    except (TypeError, IndexError):
+        msid = None
+    return msid
+
+
+def url_quote(string):
+    "escape for url quoting with python 2 or 3 method"
+    if hasattr(urllib, 'parse'):
+        # python 3
+        return urllib.parse.quote(string)
+    return urllib.quote(string)

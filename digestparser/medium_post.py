@@ -43,7 +43,8 @@ def image_formatter(digest_config, format_name, content=None):
             caption=utils.formatter_string(content, 'caption'),
             credit=utils.formatter_string(content, 'credit'),
             license=utils.formatter_string(content, 'license'),
-            file_name=utils.formatter_string(content, 'file_name')
+            file_name=utils.url_quote(utils.formatter_string(content, 'file_name')),
+            msid=utils.formatter_string(content, 'msid'),
             )
     return string
 
@@ -66,18 +67,19 @@ def digest_figure_caption_content(digest_config, image):
     return image_formatter(digest_config, 'medium_figcaption_pattern', content)
 
 
-def digest_figure_image_url(digest_config, image):
+def digest_figure_image_url(digest_config, image, digest):
     "image url based on the image object file attribute"
     content = {
-        'file_name': os.path.split(image.file)[-1]
+        'file_name': os.path.split(image.file)[-1],
+        'msid': utils.msid_from_doi(digest.doi)
         }
     return image_formatter(digest_config, 'medium_image_url', content)
 
 
-def digest_figure_content(digest_config, image):
+def digest_figure_content(digest_config, image, digest):
     "create figure content from the image object using the formatting in the config"
     content = {
-        'image_url': digest_figure_image_url(digest_config, image),
+        'image_url': digest_figure_image_url(digest_config, image, digest),
         'figcaption': digest_figure_caption_content(digest_config, image)
         }
     return image_formatter(digest_config, 'medium_figure_pattern', content)
@@ -100,7 +102,7 @@ def digest_medium_content(digest, digest_config=None):
     # figure
     figure = u''
     if digest.image and digest.image.file:
-        figure = digest_figure_content(digest_config, digest.image)
+        figure = digest_figure_content(digest_config, digest.image, digest)
     # format the final content medium_content
     content = {
         'figure': figure,
