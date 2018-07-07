@@ -2,7 +2,7 @@
 
 import unittest
 from ddt import ddt, data, unpack
-from digestparser.utils import sanitise, formatter_string
+from digestparser.utils import sanitise, formatter_string, msid_from_doi
 
 
 @ddt
@@ -40,6 +40,14 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(output, expected, fail_msg.format(
             content=content, attribute=attribute, expected=expected, output=output))
 
+    @unpack
+    @data(
+        (None, None),
+        ("10.7554/eLife.00003", 3),
+        ("not_a_doi", None)
+        )
+    def test_msid_from_doi(self, value, expected):
+        self.assertEqual(msid_from_doi(value), expected)
 
 if __name__ == '__main__':
     unittest.main()

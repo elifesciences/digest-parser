@@ -25,7 +25,7 @@ def msid_from_doi(doi):
     "return just the id portion of the doi"
     try:
         msid = int(doi.split(".")[-1])
-    except (TypeError, IndexError):
+    except (AttributeError, ValueError, IndexError):
         msid = None
     return msid
 
