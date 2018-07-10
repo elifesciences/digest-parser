@@ -12,6 +12,7 @@ class Digest(object):
         return new_instance
 
     def __init__(self):
+        self.author = None
         self.title = None
         self.summary = None
         self.keywords = []

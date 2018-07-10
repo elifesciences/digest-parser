@@ -26,6 +26,7 @@ class TestBuild(unittest.TestCase):
     def test_build_digest(self, test_data):
         "check building a digest object from a DOCX file"
         # note: below after 'the' is a unicode non-breaking space character
+        expected_author = u'Anonymous'
         expected_title = u'Fishing for errors in the\xa0tests'
         expected_summary = (u'Testing a document which mimics the format of a file we’ve used  ' +
                             'before plus CO<sub>2</sub> and Ca<sup>2+</sup>.')
@@ -42,6 +43,7 @@ class TestBuild(unittest.TestCase):
         digest = build.build_digest(test_data_path(test_data.get('file_name')))
         # assert assertions
         self.assertIsNotNone(digest)
+        self.assertEqual(digest.author, expected_author)
         self.assertEqual(digest.title, expected_title)
         self.assertEqual(digest.summary, expected_summary)
         self.assertEqual(digest.keywords, expected_keywords)
