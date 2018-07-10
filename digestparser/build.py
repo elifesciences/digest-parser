@@ -3,6 +3,7 @@ from digestparser.objects import Digest, Image
 from digestparser.zip import unzip_zip
 
 SECTION_MAP = {
+    'author': '<b>AUTHOR</b>',
     'title': '<b>DIGEST TITLE</b>',
     'summary': '<b>DIGEST ONE-SENTENCE SUMMARY</b>',
     'keywords': '<b>KEYWORDS</b>',
@@ -42,6 +43,10 @@ def build_singleton(section_name, content):
 def build_list(section_name, content):
     "extract the content and return a list of values"
     return extract_section_content(section_name, content)
+
+
+def build_author(content):
+    return build_singleton('author', content)
 
 
 def build_title(content):
@@ -115,6 +120,7 @@ def build_digest(file_name, temp_dir='tmp'):
     content = parse_content(docx_file_name)
     if content:
         digest = Digest()
+        digest.author = build_author(content)
         digest.title = build_title(content)
         digest.summary = build_summary(content)
         digest.keywords = build_keywords(content)
