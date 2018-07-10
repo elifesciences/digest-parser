@@ -1,3 +1,5 @@
+<b>AUTHOR</b>
+Anonymous
 <b>DIGEST TITLE</b>
 Fishing for errors in the tests
 <b>DIGEST ONE-SENTENCE SUMMARY</b>
