@@ -8,6 +8,24 @@ expected = OrderedDict([
     ('impactStatement', u'Testing a document which mimics the format of a file we’ve used  before plus CO<sub>2</sub> and Ca<sup>2+</sup>.'),
     ('published', 'None'),
     ('image', OrderedDict([
+            ('type', 'image'),
+            ('image', OrderedDict([
+                ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg'),
+                ('alt', ''),
+                ('attribution', [
+                    u'Anonymous and Anonymous, CC BY\u00a04.0'
+                    ]),
+                ('source', OrderedDict([
+                    ('mediaType', 'image/jpeg'),
+                    ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg/full/full/0/default.jpg'),
+                    ('filename', 'IMAGE 99999.jpeg'),
+                    ])),
+                ('size', OrderedDict([
+                    ('width', 0),
+                    ('height', 0)
+                    ])),
+                ])),
+            ('title', u'<b>It\u2019s not just mammals who can recognise sample data.</b>'),
         ])),
     ('subjects', [
         OrderedDict([

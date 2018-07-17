@@ -1,9 +1,75 @@
 "build JSON output from digest content"
-
+import os
 from collections import OrderedDict
 from digestparser.utils import msid_from_doi
 from digestparser.jats import parse_jats_digest, xml_to_html
 from digestparser.build import build_digest
+from digestparser.conf import raw_config, parse_raw_config
+
+
+def image_info(msid, file_name):
+    "get image info from the IIIF server"
+    if not msid or not file_name:
+        return {}
+    # todo logic for requests to IIIF server
+    return {}
+
+
+def image_attribution(credit, image_license):
+    "concatenate an image attribution"
+    attribution = []
+    attribution_line = ', '.join([part for part in credit, image_license if part])
+    attribution.append(attribution_line)
+    return attribution
+
+
+def image_uri(msid, file_name, digest_config):
+    "uri of the image file as defined in the settings"
+    return digest_config.get('iiif_image_uri').format(msid=msid, file_name=file_name)
+
+
+def image_source(msid, file_name, digest_config):
+    "source of the iiif image as defined in the settings"
+    source = OrderedDict()
+    source['mediaType'] = "image/jpeg"
+    source['uri'] = digest_config.get('iiif_image_source_uri').format(msid=msid,
+                                                                      file_name=file_name)
+    source['filename'] = file_name
+    return source
+
+
+def image_size(info):
+    "size of the iiif image from the info"
+    size = OrderedDict()
+    # todo - get the size from the json
+    size['width'] = info.get('width')
+    size['height'] = info.get('height')
+    return size
+
+
+def image_json(digest, digest_config):
+    "format image details into JSON format"
+    msid = str(msid_from_doi(digest.doi))
+    image_file_name = os.path.split(digest.image.file)[-1]
+    image = OrderedDict()
+    image['type'] = 'image'
+    # image details
+    image_details = OrderedDict()
+    # medium_image_url
+    image_details['uri'] = image_uri(msid, image_file_name, digest_config)
+    image_details['alt'] = ''
+    attribution = image_attribution(digest.image.credit, digest.image.license)
+    if attribution:
+        image_details['attribution'] = attribution
+    source = image_source(msid, image_file_name, digest_config)
+    image_details['source'] = source
+    # populate with IIIF server data
+    info = image_info(msid, digest.image.file)
+    size = image_size(info)
+    image_details['size'] = size
+    image['image'] = image_details
+    image['title'] = digest.image.caption
+    return image
 
 
 def content_paragraph(text):
@@ -14,9 +80,8 @@ def content_paragraph(text):
     return paragraph
 
 
-def digest_json(digest, published=None):
+def digest_json(digest, digest_config, published=None):
     "convert a digest object to JSON output"
-    # todo!!!
     json_content = OrderedDict()
     # id, for now use the msid from the doi
     json_content['id'] = str(msid_from_doi(digest.doi))
@@ -25,7 +90,7 @@ def digest_json(digest, published=None):
     # published date todo!!!
     json_content['published'] = str(published)
     # image todo!!!
-    json_content['image'] = OrderedDict()
+    json_content['image'] = image_json(digest, digest_config)
     # subjects todo!!
     subjects = []
     subjects.append(OrderedDict())
@@ -40,8 +105,9 @@ def digest_json(digest, published=None):
     return json_content
 
 
-def build_json(file_name, jats_file_name=None):
+def build_json(file_name, config_section=None, jats_file_name=None):
     "build JSON output from a DOCX input file and possibly some JATS input"
+    digest_config = parse_raw_config(raw_config(config_section))
     digest = build_digest(file_name)
 
     # override the text with the jats file digest content
@@ -50,7 +116,7 @@ def build_json(file_name, jats_file_name=None):
         if jats_content:
             digest.text = map(xml_to_html, jats_content)
 
-    json_content = digest_json(digest)
+    json_content = digest_json(digest, digest_config)
 
     # add the subjects from the jats file
     # todo!!!
