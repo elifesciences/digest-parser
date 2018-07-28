@@ -4,6 +4,7 @@ import os
 from bs4 import BeautifulSoup
 from docx import Document
 from digestparser.build import build_digest
+import digestparser.utils as utils
 
 
 class RunPart(object):
@@ -31,7 +32,7 @@ def html_runs(html):
             part.text = tag
             run_parts.append(part)
         else:
-            #part = RunPart()
+            # part = RunPart()
             part.text = tag.text
             if tag.name == 'i':
                 part.italic = True
@@ -43,6 +44,20 @@ def html_runs(html):
                 part.superscript = True
             run_parts.append(part)
     return run_parts
+
+
+def docx_file_name(digest, digest_config=None):
+    "name for the docx output file formatted from the config if available"
+    default_file_name_pattern = u'{author}_{msid:0>5}.docx'
+    file_name_pattern = default_file_name_pattern
+    if digest_config and 'output_file_name_pattern' in digest_config:
+        file_name_pattern = digest_config.get('output_file_name_pattern')
+    # collect the values from the digest if present
+    file_name = file_name_pattern.format(
+        author=digest.author,
+        msid=str(utils.msid_from_doi(digest.doi))
+    )
+    return file_name
 
 
 def digest_docx(digest, output_file_name, output_dir):
