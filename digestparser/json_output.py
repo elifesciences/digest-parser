@@ -19,7 +19,7 @@ def image_info(msid, file_name):
 def image_attribution(credit, image_license):
     "concatenate an image attribution"
     attribution = []
-    attribution_line = ', '.join([part for part in credit, image_license if part])
+    attribution_line = ', '.join([part for part in [credit, image_license] if part])
     attribution.append(attribution_line)
     return attribution
 
