@@ -1,5 +1,6 @@
 "build JSON output from digest content"
 import os
+import copy
 from collections import OrderedDict
 from digestparser.utils import msid_from_doi
 from digestparser.jats import parse_jats_digest, xml_to_html
@@ -72,6 +73,20 @@ def image_json(digest, digest_config):
     return image
 
 
+def thumbnail_image_from_image_json(image_json):
+    "modify the image_json to an image thumbnail image format"
+    thumbnail_image_json = copy.deepcopy(image_json)
+    # delete some data
+    del thumbnail_image_json['type']
+    del thumbnail_image_json['title']
+    if thumbnail_image_json['image'].get('attribution'):
+        del thumbnail_image_json['image']['attribution']
+    # change the index name
+    thumbnail_image_json['thumbnail'] = thumbnail_image_json['image']
+    del thumbnail_image_json['image']
+    return thumbnail_image_json
+
+
 def content_paragraph(text):
     "create a content paragraph from the text"
     paragraph = OrderedDict()
@@ -90,13 +105,17 @@ def digest_json(digest, digest_config, published=None):
     # published date todo!!!
     json_content['published'] = str(published)
     # image todo!!!
-    json_content['image'] = image_json(digest, digest_config)
+    content_image = image_json(digest, digest_config)
+    thumbnail_image = thumbnail_image_from_image_json(content_image)
+    json_content['image'] = thumbnail_image
     # subjects todo!!
     subjects = []
     subjects.append(OrderedDict())
     json_content['subjects'] = subjects
     # content
     content = []
+    if content_image:
+        content.append(content_image)
     for text in digest.text:
         content.append(content_paragraph(text))
     json_content['content'] = content

@@ -8,6 +8,27 @@ expected = OrderedDict([
     ('impactStatement', u'Testing a document which mimics the format of a file we’ve used  before plus CO<sub>2</sub> and Ca<sup>2+</sup>.'),
     ('published', 'None'),
     ('image', OrderedDict([
+            ('thumbnail', OrderedDict([
+                ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg'),
+                ('alt', ''),
+                ('source', OrderedDict([
+                    ('mediaType', 'image/jpeg'),
+                    ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg/full/full/0/default.jpg'),
+                    ('filename', 'IMAGE 99999.jpeg'),
+                    ])),
+                ('size', OrderedDict([
+                    ('width', 0),
+                    ('height', 0)
+                    ])),
+                ])),
+        ])),
+    ('subjects', [
+        OrderedDict([
+            ])
+        ]
+     ),
+    ('content', [
+        OrderedDict([
             ('type', 'image'),
             ('image', OrderedDict([
                 ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg'),
@@ -26,13 +47,7 @@ expected = OrderedDict([
                     ])),
                 ])),
             ('title', u'<b>It\u2019s not just mammals who can recognise sample data.</b>'),
-        ])),
-    ('subjects', [
-        OrderedDict([
-            ])
-        ]
-     ),
-    ('content', [
+        ]),
         OrderedDict([
             ('type', 'paragraph'),
             ('text', u'Truely being able to recognize sample data is crucial for social interactions in humans. This is also added, CO<sub>2</sub> or Ca<sup>2+</sup>, &amp; 1 &lt; 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
