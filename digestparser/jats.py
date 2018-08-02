@@ -71,9 +71,13 @@ def split_paragraphs(string):
     return content
 
 
-def parse_jats_digest(jats_file_name):
-    "extract the digest paragraphs from a jats file"
-    soup = parser.parse_document(jats_file_name)
+def parse_jats_file(jats_file_name):
+    "parse the jats file into a BeautifulSoup object"
+    return parser.parse_document(jats_file_name)
+
+
+def parse_jats_digest(soup):
+    "extract the digest paragraphs from soup"
     jats_digest = parser.full_digest(soup)
     return split_paragraphs(jats_digest)
 

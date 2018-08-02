@@ -3,7 +3,7 @@ import os
 import copy
 from collections import OrderedDict
 from digestparser.utils import msid_from_doi
-from digestparser.jats import parse_jats_digest, xml_to_html
+from digestparser.jats import parse_jats_file, parse_jats_digest, xml_to_html
 from digestparser.build import build_digest
 from digestparser.conf import raw_config, parse_raw_config
 
@@ -130,9 +130,10 @@ def build_json(file_name, config_section=None, jats_file_name=None):
     digest_config = parse_raw_config(raw_config(config_section))
     digest = build_digest(file_name)
 
-    # override the text with the jats file digest content
+    # override the text and other details with the jats file digest content
     if jats_file_name:
-        jats_content = parse_jats_digest(jats_file_name)
+        soup = parse_jats_file(jats_file_name)
+        jats_content = parse_jats_digest(soup)
         if jats_content:
             digest.text = map(xml_to_html, jats_content)
 
