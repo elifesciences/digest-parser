@@ -24,7 +24,13 @@ expected = OrderedDict([
         ])),
     ('subjects', [
         OrderedDict([
-            ])
+            ('id', 'biochemistry-chemical-biology'),
+            ('name', 'Biochemistry and Chemical Biology'),
+            ]),
+        OrderedDict([
+            ('id', 'structural-biology-molecular-biophysics'),
+            ('name', 'Structural Biology and Molecular Biophysics'),
+            ]),
         ]
      ),
     ('content', [

@@ -4,7 +4,8 @@ import time
 import copy
 from collections import OrderedDict
 from digestparser.utils import msid_from_doi
-from digestparser.jats import parse_jats_file, parse_jats_digest, parse_jats_pub_date, xml_to_html
+from digestparser.jats import (parse_jats_file, parse_jats_digest, parse_jats_pub_date,
+                               parse_jats_subjects, xml_to_html)
 from digestparser.build import build_digest
 from digestparser.conf import raw_config, parse_raw_config
 
@@ -109,10 +110,9 @@ def digest_json(digest, digest_config):
     content_image = image_json(digest, digest_config)
     thumbnail_image = thumbnail_image_from_image_json(content_image)
     json_content['image'] = thumbnail_image
-    # subjects todo!!
-    subjects = []
-    subjects.append(OrderedDict())
-    json_content['subjects'] = subjects
+    # subjects
+    if digest.subjects:
+        json_content['subjects'] = digest.subjects
     # content
     content = []
     for text in digest.text:
@@ -143,9 +143,9 @@ def build_json(file_name, config_section=None, jats_file_name=None):
         if pub_date:
             digest.published = time.strftime("%Y-%m-%dT%H:%M:%SZ", pub_date)
 
-    json_content = digest_json(digest, digest_config)
+        # add subjects from the jats file
+        digest.subjects = parse_jats_subjects(soup)
 
-    # add the subjects from the jats file
-    # todo!!!
+    json_content = digest_json(digest, digest_config)
 
     return json_content

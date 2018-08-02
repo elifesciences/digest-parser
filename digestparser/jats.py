@@ -1,9 +1,11 @@
 "build JATS XML output from digest content"
 
+from collections import OrderedDict
 from elifetools import parseJATS as parser
 from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand
 from elifetools.utils_html import replace_simple_tags
 from digestparser.build import build_digest
+from digestparser.utils import subject_slug
 
 
 def allowed_xml_tag_fragments():
@@ -86,6 +88,18 @@ def parse_jats_pub_date(soup):
     "extract the pub date from the soup"
     pub_date = parser.pub_date(soup)
     return pub_date
+
+
+def parse_jats_subjects(soup):
+    "extract the subject categories from the soup and format them as json"
+    subjects = []
+    categories = parser.category(soup)
+    for category in categories:
+        subject = OrderedDict()
+        subject['id'] = subject_slug(category)
+        subject['name'] = category
+        subjects.append(subject)
+    return subjects
 
 
 def build_jats(file_name):

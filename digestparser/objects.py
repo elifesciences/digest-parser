@@ -20,6 +20,7 @@ class Digest(object):
         self.text = []
         self.image = None
         self.published = None
+        self.subjects = []
 
 
 class Image(object):
