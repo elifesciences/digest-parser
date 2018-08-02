@@ -114,10 +114,11 @@ def digest_json(digest, digest_config, published=None):
     json_content['subjects'] = subjects
     # content
     content = []
-    if content_image:
-        content.append(content_image)
     for text in digest.text:
         content.append(content_paragraph(text))
+    # insert the image after paragraph 2
+    if content_image:
+        content.insert(2, content_image)
     json_content['content'] = content
     # related content todo!!!
     json_content['relatedContent'] = OrderedDict()
