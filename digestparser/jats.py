@@ -82,6 +82,12 @@ def parse_jats_digest(soup):
     return split_paragraphs(jats_digest)
 
 
+def parse_jats_pub_date(soup):
+    "extract the pub date from the soup"
+    pub_date = parser.pub_date(soup)
+    return pub_date
+
+
 def build_jats(file_name):
     "build a digest object from a DOCX input file"
     digest = build_digest(file_name)

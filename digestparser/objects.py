@@ -19,6 +19,7 @@ class Digest(object):
         self.doi = None
         self.text = []
         self.image = None
+        self.published = None
 
 
 class Image(object):

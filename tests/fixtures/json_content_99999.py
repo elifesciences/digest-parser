@@ -6,7 +6,7 @@ expected = OrderedDict([
     ('id', u'99999'),
     ('title', u'Fishing for errors in the\xa0tests'),
     ('impactStatement', u'Testing a document which mimics the format of a file we’ve used  before plus CO<sub>2</sub> and Ca<sup>2+</sup>.'),
-    ('published', 'None'),
+    ('published', '2018-08-01T00:00:00Z'),
     ('image', OrderedDict([
             ('thumbnail', OrderedDict([
                 ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg'),

@@ -1,9 +1,10 @@
 "build JSON output from digest content"
 import os
+import time
 import copy
 from collections import OrderedDict
 from digestparser.utils import msid_from_doi
-from digestparser.jats import parse_jats_file, parse_jats_digest, xml_to_html
+from digestparser.jats import parse_jats_file, parse_jats_digest, parse_jats_pub_date, xml_to_html
 from digestparser.build import build_digest
 from digestparser.conf import raw_config, parse_raw_config
 
@@ -95,15 +96,15 @@ def content_paragraph(text):
     return paragraph
 
 
-def digest_json(digest, digest_config, published=None):
+def digest_json(digest, digest_config):
     "convert a digest object to JSON output"
     json_content = OrderedDict()
     # id, for now use the msid from the doi
     json_content['id'] = str(msid_from_doi(digest.doi))
     json_content['title'] = digest.title
     json_content['impactStatement'] = digest.summary
-    # published date todo!!!
-    json_content['published'] = str(published)
+    # published date
+    json_content['published'] = str(digest.published)
     # image todo!!!
     content_image = image_json(digest, digest_config)
     thumbnail_image = thumbnail_image_from_image_json(content_image)
@@ -136,6 +137,11 @@ def build_json(file_name, config_section=None, jats_file_name=None):
         jats_content = parse_jats_digest(soup)
         if jats_content:
             digest.text = map(xml_to_html, jats_content)
+
+        # set the published date from the jats file
+        pub_date = parse_jats_pub_date(soup)
+        if pub_date:
+            digest.published = time.strftime("%Y-%m-%dT%H:%M:%SZ", pub_date)
 
     json_content = digest_json(digest, digest_config)
 
