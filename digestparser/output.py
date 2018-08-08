@@ -57,7 +57,7 @@ def docx_file_name(digest, digest_config=None):
         author=digest.author,
         msid=str(utils.msid_from_doi(digest.doi))
     )
-    return file_name
+    return utils.sanitise_file_name(file_name)
 
 
 def digest_docx(digest, output_file_name, output_dir):
