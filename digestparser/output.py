@@ -83,8 +83,7 @@ def digest_docx(digest, output_file_name, output_dir):
                 font.superscript = True
     # save the file
     output_file = os.path.join(output_dir, output_file_name)
-    with open(output_file, 'wb') as open_file:
-        document.save(open_file)
+    document.save(output_file)
     return output_file
 
 
