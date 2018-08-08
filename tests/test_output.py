@@ -73,11 +73,11 @@ class TestOutput(unittest.TestCase):
             'author': None,
             'doi': None,
             'use_config': False,
-            'expected_file_name': 'None_0None.docx'
+            'expected_file_name': u'None_0None.docx'
         },
         {
             'scenario': 'unicode author name using a default config',
-            'author': u'Nö',
+            'author': 'Nö',
             'doi': '10.7554/eLife.99999',
             'use_config': True,
             'config_section': None,
@@ -92,10 +92,17 @@ class TestOutput(unittest.TestCase):
         },
         {
             'scenario': 'ugly ugly author name and not using a config',
-            'author': u'‘“Nö(%)”/\\:"<>|*’',
+            'author': '‘“Nö(%)”/\\:"<>|*’',
             'doi': '10.7554/eLife.99999',
             'use_config': False,
             'expected_file_name': u"'Nö(%)'_99999.docx"
+        },
+        {
+            'scenario': 'testing additional unicode characters',
+            'author': 'á好',
+            'doi': '10.7554/eLife.99999',
+            'use_config': False,
+            'expected_file_name': u'á好_99999.docx'
         },
     )
     def test_docx_file_name(self, test_data):
