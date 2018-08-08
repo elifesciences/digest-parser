@@ -5,6 +5,15 @@ import re
 import urllib
 
 
+def unicode_decode(string):
+    "try to decode from utf8"
+    try:
+        string = string.decode('utf8')
+    except (UnicodeEncodeError, AttributeError):
+        pass
+    return string
+
+
 def sanitise(file_name):
     "replace unwanted characters in file name if present"
     if not file_name:
