@@ -90,7 +90,14 @@ class TestOutput(unittest.TestCase):
             'use_config': False,
             'expected_file_name': u'Nö_99999.docx'
         },
-        )
+        {
+            'scenario': 'ugly ugly author name and not using a config',
+            'author': u'‘“Nö(%)”/\\:"<>|*’',
+            'doi': '10.7554/eLife.99999',
+            'use_config': False,
+            'expected_file_name': u"'Nö(%)'_99999.docx"
+        },
+    )
     def test_docx_file_name(self, test_data):
         "docx output file name tests for various input"
         # build the Digest object
@@ -109,6 +116,15 @@ class TestOutput(unittest.TestCase):
             u"failed in scenario '{scenario}', got file_name {file_name}".format(
                 scenario=test_data.get('scenario'),
                 file_name=file_name
+                ))
+        # test for creating the file on disk
+        output_file_name = output.digest_docx(digest, file_name, 'tmp')
+        self.assertEqual(
+            os.path.join('tmp', test_data.get('expected_file_name')),
+            output_file_name,
+            u"failed creating file in scenario '{scenario}', got file_name {file_name}".format(
+                scenario=test_data.get('scenario'),
+                file_name=output_file_name
                 ))
 
 

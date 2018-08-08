@@ -1,3 +1,5 @@
+# coding=utf-8
+
 "utility helper functions"
 import re
 import urllib
@@ -11,6 +13,28 @@ def sanitise(file_name):
     file_name = file_name.replace('\\', '')
     file_name = re.sub(r'\.+', '.', file_name)
     file_name = file_name.lstrip('.')
+    return file_name
+
+
+def char_map():
+    "set of character replacements for use in sanitising file names"
+    return {
+        u'’': "'",
+        u'‘': "'",
+        u'“': '"',
+        u'”': '"',
+    }
+
+
+def sanitise_file_name(file_name):
+    "more extensive sanitising of a file name with some replacement characters and allowed ones"
+    # basic sanitise first
+    file_name = sanitise(file_name)
+    # character replacements
+    for match, replacement in char_map().items():
+        file_name = re.sub(match, replacement, file_name)
+    # remove more unsafe impossible file name characters
+    file_name = re.sub(r'[*:"<>|]', '', file_name)
     return file_name
 
 
