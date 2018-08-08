@@ -1,6 +1,7 @@
 "build DOCX output from digest content"
 
 import os
+from io import open
 from bs4 import BeautifulSoup
 from docx import Document
 from digestparser.build import build_digest
@@ -83,7 +84,8 @@ def digest_docx(digest, output_file_name, output_dir):
                 font.superscript = True
     # save the file
     output_file = os.path.join(output_dir, output_file_name)
-    document.save(output_file)
+    with open(output_file, 'wb') as open_file:
+        document.save(open_file)
     return output_file
 
 
