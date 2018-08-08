@@ -104,6 +104,13 @@ class TestOutput(unittest.TestCase):
             'use_config': False,
             'expected_file_name': u'á好_99999.docx'
         },
+        {
+            'scenario': 'testing unicode characters using the config pattern',
+            'author': u'\xe1',
+            'doi': '10.7554/eLife.99999',
+            'use_config': True,
+            'expected_file_name': u'á_99999.docx'
+        },
     )
     def test_docx_file_name(self, test_data):
         "docx output file name tests for various input"
