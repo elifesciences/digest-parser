@@ -61,7 +61,7 @@ def docx_file_name(digest, digest_config=None):
     return utils.sanitise_file_name(file_name)
 
 
-def digest_docx(digest, output_file_name, output_dir):
+def digest_docx(digest, output_file_name):
     "convert a digest object to DOCX output"
     # create the docx Document
     document = Document()
@@ -83,14 +83,13 @@ def digest_docx(digest, output_file_name, output_dir):
             if run_part.superscript:
                 font.superscript = True
     # save the file
-    output_file = os.path.join(output_dir, output_file_name)
-    with open(output_file, 'wb') as open_file:
+    with open(output_file_name, 'wb') as open_file:
         document.save(open_file)
-    return output_file
+    return output_file_name
 
 
-def build_docx(file_name, output_file_name, output_dir='tmp'):
+def build_docx(file_name, output_file_name):
     "build an output DOCX from a DOCX input file"
     digest = build_digest(file_name)
-    docx_file = digest_docx(digest, output_file_name, output_dir)
+    docx_file = digest_docx(digest, output_file_name)
     return docx_file
