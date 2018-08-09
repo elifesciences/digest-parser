@@ -32,7 +32,8 @@ class TestOutput(unittest.TestCase):
         output_file_name = output.docx_file_name(digest)
         expected_fixture = fixture_file(test_data.get('expected_docx_file'))
         # build now
-        docx_file = output.build_docx(test_data_path(file_name), output_file_name, output_dir)
+        full_file_name = os.path.join(output_dir, output_file_name)
+        docx_file = output.build_docx(test_data_path(file_name), full_file_name)
         # assert assertions
         self.assertEqual(docx_file, os.path.join(output_dir, output_file_name))
         # parse and compare the content of the built docx and the fixture docx
@@ -48,7 +49,8 @@ class TestOutput(unittest.TestCase):
         expected_content = "DIGEST\n<b>Test</b>\n"
         digest = Digest()
         digest.text = text
-        docx_file = output.digest_docx(digest, output_file_name, output_dir)
+        full_file_name = os.path.join(output_dir, output_file_name)
+        docx_file = output.digest_docx(digest, full_file_name)
         output_content = parse_content(docx_file)
         self.assertEqual(output_content, expected_content)
 
@@ -132,7 +134,8 @@ class TestOutput(unittest.TestCase):
                 file_name=file_name
                 ))
         # test for creating the file on disk
-        output_file_name = output.digest_docx(digest, file_name, 'tmp')
+        full_file_name = os.path.join('tmp', file_name)
+        output_file_name = output.digest_docx(digest, full_file_name)
         self.assertEqual(
             os.path.join('tmp', test_data.get('expected_file_name')),
             output_file_name,
