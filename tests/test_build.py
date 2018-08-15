@@ -4,6 +4,7 @@ import os
 import unittest
 from ddt import ddt, data
 from tests import read_fixture, test_data_path
+from digestparser.conf import raw_config, parse_raw_config
 from digestparser import build
 
 
@@ -42,9 +43,9 @@ class TestBuild(unittest.TestCase):
         expected_image_credit = u'Anonymous and Anonymous'
         expected_image_license = u'CC BY 4.0'
         # build now
+        digest_config = parse_raw_config(raw_config(test_data.get('config_section')))
         digest = build.build_digest(test_data_path(test_data.get('file_name')),
-                                    'tmp',
-                                    test_data.get('config_section'))
+                                    'tmp', digest_config)
         # assert assertions
         self.assertIsNotNone(digest)
         self.assertEqual(digest.author, expected_author)
