@@ -1,6 +1,8 @@
 from digestparser.parse import parse_content
 from digestparser.objects import Digest, Image
 from digestparser.zip import unzip_zip
+from digestparser.conf import raw_config, parse_raw_config
+
 
 SECTION_MAP = {
     'author': '<b>AUTHOR</b>',
@@ -8,6 +10,7 @@ SECTION_MAP = {
     'summary': '<b>DIGEST ONE-SENTENCE SUMMARY</b>',
     'keywords': '<b>KEYWORDS</b>',
     'doi': '<b>FULL ARTICLE DOI</b>',
+    'manuscript_number': '<b>MANUSCRIPT NUMBER</b>',
     'text': '<b>DIGEST TEXT</b>',
     'image': '<b>IMAGE CREDIT</b>',
 }
@@ -65,8 +68,20 @@ def build_keywords(content):
     return raw_keywords
 
 
-def build_doi(content):
-    return build_singleton('doi', content)
+def build_manuscript_number(content):
+    return build_singleton('manuscript_number', content)
+
+
+def build_doi(content, digest_config):
+    "prefer formatting the manuscript number into a doi, if not available use the doi from the docx"
+    doi = None
+    manuscript_number = build_manuscript_number(content)
+    if manuscript_number and digest_config and digest_config.get('doi_pattern'):
+        doi = digest_config.get('doi_pattern').format(msid=manuscript_number)
+    else:
+        # look for a doi
+        doi = build_singleton('doi', content)
+    return doi
 
 
 def build_text(content):
@@ -113,8 +128,9 @@ def handle_zip(file_name, temp_dir):
     return docx_file_name, image_file_name
 
 
-def build_digest(file_name, temp_dir='tmp'):
+def build_digest(file_name, temp_dir='tmp', config_section=None):
     "build a digest object from a DOCX input file"
+    digest_config = parse_raw_config(raw_config(config_section))
     digest = None
     docx_file_name, image_file_name = handle_zip(file_name, temp_dir)
     content = parse_content(docx_file_name)
@@ -124,7 +140,8 @@ def build_digest(file_name, temp_dir='tmp'):
         digest.title = build_title(content)
         digest.summary = build_summary(content)
         digest.keywords = build_keywords(content)
-        digest.doi = build_doi(content)
+        digest.manuscript_number = build_manuscript_number(content)
+        digest.doi = build_doi(content, digest_config)
         digest.text = build_text(content)
         digest.image = build_image(content, image_file_name)
     return digest
