@@ -9,6 +9,7 @@ SECTION_MAP = {
     'title': '<b>DIGEST TITLE</b>',
     'summary': '<b>DIGEST ONE-SENTENCE SUMMARY</b>',
     'keywords': '<b>KEYWORDS</b>',
+    'doi': '<b>FULL ARTICLE DOI</b>',
     'manuscript_number': '<b>MANUSCRIPT NUMBER</b>',
     'text': '<b>DIGEST TEXT</b>',
     'image': '<b>IMAGE CREDIT</b>',
@@ -72,10 +73,14 @@ def build_manuscript_number(content):
 
 
 def build_doi(content, digest_config):
+    "prefer formatting the manuscript number into a doi, if not available use the doi from the docx"
     doi = None
     manuscript_number = build_manuscript_number(content)
-    if digest_config and digest_config.get('doi_pattern'):
+    if manuscript_number and digest_config and digest_config.get('doi_pattern'):
         doi = digest_config.get('doi_pattern').format(msid=manuscript_number)
+    else:
+        # look for a doi
+        doi = build_singleton('doi', content)
     return doi
 
 

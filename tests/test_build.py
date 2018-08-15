@@ -76,6 +76,30 @@ class TestBuild(unittest.TestCase):
         "test parsing image content from blank content for coverage"
         self.assertIsNone(build.build_image(''))
 
+    def test_build_doi_manuscript_number(self):
+        "test parsing a doi with manuscript number, prefers manuscript number"
+        content = '''
+<b>MANUSCRIPT NUMBER</b>
+11111
+<b>FULL ARTICLE DOI</b>
+https://doi.org/10.7554/eLife.99999
+        '''
+        digest_config = {'doi_pattern': 'https://doi.org/10.7554/eLife.{msid:0>5}'}
+        expected_doi = 'https://doi.org/10.7554/eLife.11111'
+        doi = build.build_doi(content, digest_config)
+        self.assertEqual(doi, expected_doi)
+
+    def test_build_doi_no_manuscript_number(self):
+        "test parsing a doi if no manuscript number is parsed"
+        content = '''
+<b>FULL ARTICLE DOI</b>
+https://doi.org/10.7554/eLife.99999
+        '''
+        digest_config = {}
+        expected_doi = 'https://doi.org/10.7554/eLife.99999'
+        doi = build.build_doi(content, digest_config)
+        self.assertEqual(doi, expected_doi)
+
 
 if __name__ == '__main__':
     unittest.main()
