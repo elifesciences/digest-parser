@@ -128,9 +128,8 @@ def handle_zip(file_name, temp_dir):
     return docx_file_name, image_file_name
 
 
-def build_digest(file_name, temp_dir='tmp', config_section=None):
+def build_digest(file_name, temp_dir='tmp', digest_config=None):
     "build a digest object from a DOCX input file"
-    digest_config = parse_raw_config(raw_config(config_section))
     digest = None
     docx_file_name, image_file_name = handle_zip(file_name, temp_dir)
     content = parse_content(docx_file_name)

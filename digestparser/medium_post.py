@@ -136,12 +136,11 @@ def digest_medium_content_format(digest_config):
     return content_format
 
 
-def build_medium_content(file_name, config_section=None, jats_file_name=None):
+def build_medium_content(file_name, digest_config=None, jats_file_name=None):
     "build Medium content from a DOCX input file"
-    digest_config = parse_raw_config(raw_config(config_section))
 
     # build the digest object
-    digest = build_digest(file_name, 'tmp', config_section)
+    digest = build_digest(file_name, 'tmp', digest_config)
 
     # override the text with the jats file digest content
     if jats_file_name:
@@ -170,10 +169,8 @@ def build_medium_content(file_name, config_section=None, jats_file_name=None):
     return medium_content
 
 
-def post_content(medium_content, config_section=None):
+def post_content(medium_content, digest_config=None):
     "post the Medium content to Medium"
-    digest_config = parse_raw_config(raw_config(config_section))
-
     medium_client = Client(
         application_id=digest_config.get('medium_application_client_id'),
         application_secret=digest_config.get('medium_application_client_secret'))
