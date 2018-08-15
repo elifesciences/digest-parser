@@ -141,7 +141,7 @@ def build_medium_content(file_name, config_section=None, jats_file_name=None):
     digest_config = parse_raw_config(raw_config(config_section))
 
     # build the digest object
-    digest = build_digest(file_name)
+    digest = build_digest(file_name, 'tmp', config_section)
 
     # override the text with the jats file digest content
     if jats_file_name:

@@ -16,10 +16,12 @@ class TestBuild(unittest.TestCase):
     @data(
         {
             'file_name': 'DIGEST 99999.docx',
+            'config_section': 'elife',
             'image_file': None
         },
         {
             'file_name': 'DIGEST 99999.zip',
+            'config_section': 'elife',
             'image_file': 'IMAGE 99999.jpeg'
         }
         )
@@ -40,7 +42,9 @@ class TestBuild(unittest.TestCase):
         expected_image_credit = u'Anonymous and Anonymous'
         expected_image_license = u'CC BY 4.0'
         # build now
-        digest = build.build_digest(test_data_path(test_data.get('file_name')))
+        digest = build.build_digest(test_data_path(test_data.get('file_name')),
+                                    'tmp',
+                                    test_data.get('config_section'))
         # assert assertions
         self.assertIsNotNone(digest)
         self.assertEqual(digest.author, expected_author)

@@ -16,6 +16,7 @@ class Digest(object):
         self.title = None
         self.summary = None
         self.keywords = []
+        self.manuscript_number = None
         self.doi = None
         self.text = []
         self.image = None
