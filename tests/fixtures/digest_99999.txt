@@ -6,8 +6,8 @@ Fishing for errors in the tests
 Testing a document which mimics the format of a file we’ve used  before plus CO<sub>2</sub> and Ca<sup>2+</sup>.
 <b>KEYWORDS</b>
 Face Recognition, Neuroscience, Vision
-<b>FULL ARTICLE DOI</b>
-https://doi.org/10.7554/eLife.99999
+<b>MANUSCRIPT NUMBER</b>
+99999
 <b>DIGEST TEXT</b>
 Being able to recognize sample data is crucial for social interactions in humans. This is also added, CO<sub>2</sub> or Ca<sup>2+</sup>, & 1 < 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Some other mammals also identify sample data. For example, female medaka fish (<i>Oryzias latipes</i>) prefer sample data they have seen before to ‘strangers’. However, until now, it was not known if they can recognize individual faces, nor how they distinguish a specific male from many others.

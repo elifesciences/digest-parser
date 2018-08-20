@@ -9,6 +9,9 @@ def profile_zip(file_name):
     zip_image_file_name = None
     with zipfile.ZipFile(file_name, 'r') as open_zipfile:
         for zipfile_file in open_zipfile.namelist():
+            # ignore files in subfolders like __MACOSX
+            if '/' in zipfile_file:
+                continue
             if zipfile_file.endswith('.docx'):
                 zip_docx_file_name = zipfile_file
             else:

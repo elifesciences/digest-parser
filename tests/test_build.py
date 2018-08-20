@@ -4,6 +4,7 @@ import os
 import unittest
 from ddt import ddt, data
 from tests import read_fixture, test_data_path
+from digestparser.conf import raw_config, parse_raw_config
 from digestparser import build
 
 
@@ -16,10 +17,12 @@ class TestBuild(unittest.TestCase):
     @data(
         {
             'file_name': 'DIGEST 99999.docx',
+            'config_section': 'elife',
             'image_file': None
         },
         {
             'file_name': 'DIGEST 99999.zip',
+            'config_section': 'elife',
             'image_file': 'IMAGE 99999.jpeg'
         }
         )
@@ -40,7 +43,9 @@ class TestBuild(unittest.TestCase):
         expected_image_credit = u'Anonymous and Anonymous'
         expected_image_license = u'CC BY 4.0'
         # build now
-        digest = build.build_digest(test_data_path(test_data.get('file_name')))
+        digest_config = parse_raw_config(raw_config(test_data.get('config_section')))
+        digest = build.build_digest(test_data_path(test_data.get('file_name')),
+                                    'tmp', digest_config)
         # assert assertions
         self.assertIsNotNone(digest)
         self.assertEqual(digest.author, expected_author)
@@ -71,6 +76,30 @@ class TestBuild(unittest.TestCase):
     def test_build_image_blank_conten(self):
         "test parsing image content from blank content for coverage"
         self.assertIsNone(build.build_image(''))
+
+    def test_build_doi_manuscript_number(self):
+        "test parsing a doi with manuscript number, prefers manuscript number"
+        content = '''
+<b>MANUSCRIPT NUMBER</b>
+11111
+<b>FULL ARTICLE DOI</b>
+https://doi.org/10.7554/eLife.99999
+        '''
+        digest_config = {'doi_pattern': 'https://doi.org/10.7554/eLife.{msid:0>5}'}
+        expected_doi = 'https://doi.org/10.7554/eLife.11111'
+        doi = build.build_doi(content, digest_config)
+        self.assertEqual(doi, expected_doi)
+
+    def test_build_doi_no_manuscript_number(self):
+        "test parsing a doi if no manuscript number is parsed"
+        content = '''
+<b>FULL ARTICLE DOI</b>
+https://doi.org/10.7554/eLife.99999
+        '''
+        digest_config = {}
+        expected_doi = 'https://doi.org/10.7554/eLife.99999'
+        doi = build.build_doi(content, digest_config)
+        self.assertEqual(doi, expected_doi)
 
 
 if __name__ == '__main__':

@@ -126,10 +126,9 @@ def digest_json(digest, digest_config):
     return json_content
 
 
-def build_json(file_name, config_section=None, jats_file_name=None):
+def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=None):
     "build JSON output from a DOCX input file and possibly some JATS input"
-    digest_config = parse_raw_config(raw_config(config_section))
-    digest = build_digest(file_name)
+    digest = build_digest(file_name, temp_dir, digest_config)
 
     # override the text and other details with the jats file digest content
     if jats_file_name:

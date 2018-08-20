@@ -4,6 +4,7 @@ import unittest
 from mock import patch
 from ddt import ddt, data
 from digestparser import json_output
+from digestparser.conf import raw_config, parse_raw_config
 from tests import read_fixture, test_data_path, fixture_file
 
 
@@ -15,6 +16,7 @@ class TestJsonOutput(unittest.TestCase):
 
     @data(
         {
+            'config_section': 'elife',
             'file_name': 'DIGEST 99999.zip',
             'jats_file': 'elife-99999-v0.xml',
             'expected_json_file': 'json_content_99999.py'
@@ -28,9 +30,14 @@ class TestJsonOutput(unittest.TestCase):
         file_name = test_data_path(test_data.get('file_name'))
         jats_file = fixture_file(test_data.get('jats_file'))
         expected_json = read_fixture(test_data.get('expected_json_file'))
+        # config
+        digest_config = parse_raw_config(raw_config(test_data.get('config_section')))
         # build now
-        json_content = json_output.build_json(file_name, config_section, jats_file)
+        json_content = json_output.build_json(file_name, 'tmp', digest_config, jats_file)
         # assert assertions
+        #import json
+        #print(json.dumps(json_content, indent=4))
+        #print(json.dumps(expected_json, indent=4))
         self.assertEqual(json_content, expected_json)
 
     def test_image_info_missing_data(self):

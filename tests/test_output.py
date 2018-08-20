@@ -32,7 +32,8 @@ class TestOutput(unittest.TestCase):
         output_file_name = output.docx_file_name(digest)
         expected_fixture = fixture_file(test_data.get('expected_docx_file'))
         # build now
-        docx_file = output.build_docx(test_data_path(file_name), output_file_name, output_dir)
+        full_file_name = os.path.join(output_dir, output_file_name)
+        docx_file = output.build_docx(test_data_path(file_name), full_file_name)
         # assert assertions
         self.assertEqual(docx_file, os.path.join(output_dir, output_file_name))
         # parse and compare the content of the built docx and the fixture docx
@@ -48,7 +49,8 @@ class TestOutput(unittest.TestCase):
         expected_content = "DIGEST\n<b>Test</b>\n"
         digest = Digest()
         digest.text = text
-        docx_file = output.digest_docx(digest, output_file_name, output_dir)
+        full_file_name = os.path.join(output_dir, output_file_name)
+        docx_file = output.digest_docx(digest, full_file_name)
         output_content = parse_content(docx_file)
         self.assertEqual(output_content, expected_content)
 
@@ -73,11 +75,11 @@ class TestOutput(unittest.TestCase):
             'author': None,
             'doi': None,
             'use_config': False,
-            'expected_file_name': 'None_0None.docx'
+            'expected_file_name': u'None_0None.docx'
         },
         {
             'scenario': 'unicode author name using a default config',
-            'author': u'Nö',
+            'author': 'Nö',
             'doi': '10.7554/eLife.99999',
             'use_config': True,
             'config_section': None,
@@ -90,7 +92,28 @@ class TestOutput(unittest.TestCase):
             'use_config': False,
             'expected_file_name': u'Nö_99999.docx'
         },
-        )
+        {
+            'scenario': 'ugly ugly author name and not using a config',
+            'author': '‘“Nö(%)”/\\:"<>|*’',
+            'doi': '10.7554/eLife.99999',
+            'use_config': False,
+            'expected_file_name': u"'Nö(%)'_99999.docx"
+        },
+        {
+            'scenario': 'testing additional unicode characters',
+            'author': 'á好',
+            'doi': '10.7554/eLife.99999',
+            'use_config': False,
+            'expected_file_name': u'á好_99999.docx'
+        },
+        {
+            'scenario': 'testing unicode characters using the config pattern',
+            'author': u'\xe1',
+            'doi': '10.7554/eLife.99999',
+            'use_config': True,
+            'expected_file_name': u'á_99999.docx'
+        },
+    )
     def test_docx_file_name(self, test_data):
         "docx output file name tests for various input"
         # build the Digest object
@@ -109,6 +132,16 @@ class TestOutput(unittest.TestCase):
             u"failed in scenario '{scenario}', got file_name {file_name}".format(
                 scenario=test_data.get('scenario'),
                 file_name=file_name
+                ))
+        # test for creating the file on disk
+        full_file_name = os.path.join('tmp', file_name)
+        output_file_name = output.digest_docx(digest, full_file_name)
+        self.assertEqual(
+            os.path.join('tmp', test_data.get('expected_file_name')),
+            output_file_name,
+            u"failed creating file in scenario '{scenario}', got file_name {file_name}".format(
+                scenario=test_data.get('scenario'),
+                file_name=output_file_name
                 ))
 
 

@@ -125,24 +125,22 @@ class TestMediumFigure(unittest.TestCase):
 
     def test_build_medium_content(self):
         "test building from a DOCX file and converting to Medium content"
-        config_section = 'elife'
         docx_file = 'DIGEST 99999.docx'
         expected_medium_content = read_fixture('medium_content_99999.py')
         # build the digest object
         medium_content = medium_post.build_medium_content(test_data_path(docx_file),
-                                                          config_section)
+                                                          self.digest_config)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 
     def test_build_medium_content_with_jats(self):
         "test building from a DOCX file and converting to Medium content"
-        config_section = 'elife'
         docx_file = 'DIGEST 99999.zip'
         jats_file = fixture_file('elife-99999-v0.xml')
         expected_medium_content = read_fixture('medium_content_jats_99999.py')
         # build the digest object
         medium_content = medium_post.build_medium_content(
-            test_data_path(docx_file), config_section, jats_file)
+            test_data_path(docx_file), self.digest_config, jats_file)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 
@@ -152,7 +150,7 @@ class TestMediumFigure(unittest.TestCase):
         fake_client.return_value = MockClient()
         medium_content = None
         # do the action
-        post = medium_post.post_content(medium_content)
+        post = medium_post.post_content(medium_content, self.digest_config)
         # test assertions
         self.assertEqual(post.get('publishStatus'), 'draft')
 
