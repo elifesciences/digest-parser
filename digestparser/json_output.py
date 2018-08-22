@@ -57,7 +57,7 @@ def image_source(msid, file_name, digest_config):
 def image_size(info):
     "size of the iiif image from the info"
     size = OrderedDict()
-    # todo - get the size from the json
+    # get the size from the json
     size['width'] = info.get('width')
     size['height'] = info.get('height')
     return size
@@ -133,7 +133,7 @@ def digest_json(digest, digest_config, related=None):
     json_content['impactStatement'] = digest.summary
     # published date
     json_content['published'] = str(digest.published)
-    # image todo!!!
+    # image
     content_image = image_json(digest, digest_config)
     thumbnail_image = thumbnail_image_from_image_json(content_image)
     json_content['image'] = thumbnail_image

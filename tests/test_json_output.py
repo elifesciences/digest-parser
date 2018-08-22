@@ -65,9 +65,6 @@ class TestJsonOutput(unittest.TestCase):
         json_content = json_output.build_json(file_name, 'tmp', digest_config,
                                               jats_file, image_file_name, related)
         # assert assertions
-        #import json
-        #print(json.dumps(json_content, indent=4))
-        #print(json.dumps(expected_json, indent=4))
         self.assertEqual(json_content, expected_json)
 
     def test_image_info_missing_data(self):
