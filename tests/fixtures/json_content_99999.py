@@ -9,12 +9,12 @@ expected = OrderedDict([
     ('published', '2018-08-01T00:00:00Z'),
     ('image', OrderedDict([
             ('thumbnail', OrderedDict([
-                ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg'),
+                ('uri', 'https://iiif.elifesciences.org/digests:99999%2Fdigest-99999.jpg'),
                 ('alt', ''),
                 ('source', OrderedDict([
                     ('mediaType', 'image/jpeg'),
-                    ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg/full/full/0/default.jpg'),
-                    ('filename', 'IMAGE 99999.jpeg'),
+                    ('uri', 'https://iiif.elifesciences.org/digests:99999%2Fdigest-99999.jpg/full/full/0/default.jpg'),
+                    ('filename', 'digest-99999.jpg'),
                     ])),
                 ('size', OrderedDict([
                     ('width', 0),
@@ -45,15 +45,15 @@ expected = OrderedDict([
         OrderedDict([
             ('type', 'image'),
             ('image', OrderedDict([
-                ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg'),
+                ('uri', 'https://iiif.elifesciences.org/digests:99999%2Fdigest-99999.jpg'),
                 ('alt', ''),
                 ('attribution', [
                     u'Anonymous and Anonymous, CC BY\u00a04.0'
                     ]),
                 ('source', OrderedDict([
                     ('mediaType', 'image/jpeg'),
-                    ('uri', 'https://iiif.elifesciences.org/digests:99999%2FIMAGE 99999.jpeg/full/full/0/default.jpg'),
-                    ('filename', 'IMAGE 99999.jpeg'),
+                    ('uri', 'https://iiif.elifesciences.org/digests:99999%2Fdigest-99999.jpg/full/full/0/default.jpg'),
+                    ('filename', 'digest-99999.jpg'),
                     ])),
                 ('size', OrderedDict([
                     ('width', 0),

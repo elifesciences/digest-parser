@@ -8,6 +8,19 @@ from digestparser.conf import raw_config, parse_raw_config
 from tests import read_fixture, test_data_path, fixture_file
 
 
+class FakeResponse(object):
+    def __new__(cls, json_response):
+        new_instance = object.__new__(cls)
+        new_instance.__init__(json_response)
+        return new_instance
+
+    def __init__(self, json_response):
+        self.json_response = json_response
+
+    def json(self):
+        return self.json_response
+
+
 @ddt
 class TestJsonOutput(unittest.TestCase):
 
@@ -19,6 +32,7 @@ class TestJsonOutput(unittest.TestCase):
             'config_section': 'elife',
             'file_name': 'DIGEST 99999.zip',
             'jats_file': 'elife-99999-v0.xml',
+            'image_file_name': 'digest-99999.jpg',
             'related': [{
                 'id': '99999',
                 'type': 'research-article',
@@ -36,19 +50,20 @@ class TestJsonOutput(unittest.TestCase):
             'expected_json_file': 'json_content_99999.py'
         },
         )
-    @patch.object(json_output, 'image_info')
-    def test_build_json(self, test_data, fake_image_info):
+    @patch.object(json_output, 'iiif_server_info')
+    def test_build_json(self, test_data, fake_iiif_server_info):
         "check building a JSON from a DOCX file"
-        fake_image_info.return_value = {'width': 0, 'height': 0}
-        config_section = 'elife'
+        fake_iiif_server_info.return_value = {'width': 0, 'height': 0}
         file_name = test_data_path(test_data.get('file_name'))
         jats_file = fixture_file(test_data.get('jats_file'))
         expected_json = read_fixture(test_data.get('expected_json_file'))
         # config
         digest_config = parse_raw_config(raw_config(test_data.get('config_section')))
+        image_file_name = test_data.get('image_file_name')
         related = test_data.get('related')
         # build now
-        json_content = json_output.build_json(file_name, 'tmp', digest_config, jats_file, related)
+        json_content = json_output.build_json(file_name, 'tmp', digest_config,
+                                              jats_file, image_file_name, related)
         # assert assertions
         #import json
         #print(json.dumps(json_content, indent=4))
@@ -57,7 +72,22 @@ class TestJsonOutput(unittest.TestCase):
 
     def test_image_info_missing_data(self):
         "test missing data when requesting IIIF server info for coverage"
-        self.assertEqual(json_output.image_info(None, None), {})
+        self.assertEqual(json_output.image_info(None, None, None), {})
+
+    @patch.object(json_output.requests, 'get')
+    def test_iiif_server_info(self, fake_get):
+        "test the iiif server connection mocking requests"
+        fake_get.return_value = FakeResponse({'width': 100})
+        expected_info = {'width': 100}
+        self.assertEqual(json_output.iiif_server_info(None), expected_info)
+
+    @patch.object(json_output.requests, 'get')
+    def test_iiif_server_info_error(self, fake_get):
+        "test iiif server exception"
+        fake_get.side_effect = RuntimeError()
+        fake_get.return_value = FakeResponse({'width': 100})
+        expected_info = {}
+        self.assertEqual(json_output.iiif_server_info(None), expected_info)
 
 
 if __name__ == '__main__':

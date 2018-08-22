@@ -3,6 +3,7 @@ import os
 import time
 import copy
 from collections import OrderedDict
+import requests
 from elifetools.utils import copy_attribute
 from digestparser.utils import msid_from_doi
 from digestparser.jats import (parse_jats_file, parse_jats_digest, parse_jats_pub_date,
@@ -10,12 +11,24 @@ from digestparser.jats import (parse_jats_file, parse_jats_digest, parse_jats_pu
 from digestparser.build import build_digest
 
 
-def image_info(msid, file_name):
+def iiif_server_info(info_url):
+    "get the image info from the IIIF server"
+    info = {}
+    try:
+        response = requests.get(info_url)
+        info = response.json()
+    except:
+        # could be any error right now
+        pass
+    return info
+
+
+def image_info(msid, file_name, digest_config):
     "get image info from the IIIF server"
-    if not msid or not file_name:
+    if not msid or not file_name or not digest_config:
         return {}
-    # todo logic for requests to IIIF server
-    return {}
+    info_url = digest_config.get('iiif_info_url').format(msid=msid, file_name=file_name)
+    return iiif_server_info(info_url)
 
 
 def image_attribution(credit, image_license):
@@ -67,7 +80,7 @@ def image_json(digest, digest_config):
     source = image_source(msid, image_file_name, digest_config)
     image_details['source'] = source
     # populate with IIIF server data
-    info = image_info(msid, digest.image.file)
+    info = image_info(msid, image_file_name, digest_config)
     size = image_size(info)
     image_details['size'] = size
     image['image'] = image_details
@@ -142,7 +155,7 @@ def digest_json(digest, digest_config, related=None):
 
 
 def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=None,
-               related=None):
+               image_file_name=None, related=None):
     "build JSON output from a DOCX input file and possibly some JATS input"
     digest = build_digest(file_name, temp_dir, digest_config)
 
@@ -160,6 +173,10 @@ def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=Non
 
         # add subjects from the jats file
         digest.subjects = parse_jats_subjects(soup)
+
+    # override the image file name if provided
+    if image_file_name:
+        digest.image.file = image_file_name
 
     json_content = digest_json(digest, digest_config, related)
 
