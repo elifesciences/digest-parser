@@ -68,6 +68,20 @@ expected = OrderedDict([
             ]),
         ]
      ),
-    ('relatedContent', OrderedDict([
-        ]))
+    ('relatedContent', [
+        OrderedDict([
+            ('type', 'research-article'),
+            ('status', 'vor'),
+            ('id', '99999'),
+            ('version', 1),
+            ('doi', '10.7554/eLife.99999'),
+            ('authorLine', 'Anonymous et al.'),
+            ('title', 'A research article related to the digest'),
+            ('stage', 'published'),
+            ('published', '2018-06-04T00:00:00Z'),
+            ('statusDate', '2018-06-04T00:00:00Z'),
+            ('volume', 7),
+            ('elocationId', 'e99999')
+            ])
+        ]),
     ])

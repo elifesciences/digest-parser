@@ -19,6 +19,20 @@ class TestJsonOutput(unittest.TestCase):
             'config_section': 'elife',
             'file_name': 'DIGEST 99999.zip',
             'jats_file': 'elife-99999-v0.xml',
+            'related': [{
+                'id': '99999',
+                'type': 'research-article',
+                'status': 'vor',
+                'version': 1,
+                'doi': '10.7554/eLife.99999',
+                'authorLine': 'Anonymous et al.',
+                'title': 'A research article related to the digest',
+                'stage': 'published',
+                'published': '2018-06-04T00:00:00Z',
+                'statusDate': '2018-06-04T00:00:00Z',
+                'volume': 7,
+                'elocationId': 'e99999'
+                }],
             'expected_json_file': 'json_content_99999.py'
         },
         )
@@ -32,8 +46,9 @@ class TestJsonOutput(unittest.TestCase):
         expected_json = read_fixture(test_data.get('expected_json_file'))
         # config
         digest_config = parse_raw_config(raw_config(test_data.get('config_section')))
+        related = test_data.get('related')
         # build now
-        json_content = json_output.build_json(file_name, 'tmp', digest_config, jats_file)
+        json_content = json_output.build_json(file_name, 'tmp', digest_config, jats_file, related)
         # assert assertions
         #import json
         #print(json.dumps(json_content, indent=4))

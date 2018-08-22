@@ -3,11 +3,11 @@ import os
 import time
 import copy
 from collections import OrderedDict
+from elifetools.utils import copy_attribute
 from digestparser.utils import msid_from_doi
 from digestparser.jats import (parse_jats_file, parse_jats_digest, parse_jats_pub_date,
                                parse_jats_subjects, xml_to_html)
 from digestparser.build import build_digest
-from digestparser.conf import raw_config, parse_raw_config
 
 
 def image_info(msid, file_name):
@@ -97,7 +97,21 @@ def content_paragraph(text):
     return paragraph
 
 
-def digest_json(digest, digest_config):
+def related_content(related):
+    "format relatedContent values from a list of data"
+    content = []
+    values = ['type', 'status', 'id', 'version', 'doi', 'authorLine', 'title', 'stage',
+              'published', 'statusDate', 'volume', 'elocationId']
+    if related:
+        for item in related:
+            related_item = OrderedDict()
+            for value in values:
+                copy_attribute(item, value, related_item)
+            content.append(related_item)
+    return content
+
+
+def digest_json(digest, digest_config, related=None):
     "convert a digest object to JSON output"
     json_content = OrderedDict()
     # id, for now use the msid from the doi
@@ -121,12 +135,14 @@ def digest_json(digest, digest_config):
     if content_image:
         content.insert(2, content_image)
     json_content['content'] = content
-    # related content todo!!!
-    json_content['relatedContent'] = OrderedDict()
+    # related content
+    if related is not None:
+        json_content['relatedContent'] = related_content(related)
     return json_content
 
 
-def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=None):
+def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=None,
+               related=None):
     "build JSON output from a DOCX input file and possibly some JATS input"
     digest = build_digest(file_name, temp_dir, digest_config)
 
@@ -145,6 +161,6 @@ def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=Non
         # add subjects from the jats file
         digest.subjects = parse_jats_subjects(soup)
 
-    json_content = digest_json(digest, digest_config)
+    json_content = digest_json(digest, digest_config, related)
 
     return json_content
