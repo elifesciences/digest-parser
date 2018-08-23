@@ -105,7 +105,7 @@ class TestMediumFigure(unittest.TestCase):
         digest = Digest()
         digest.doi = '10.7554/eLife.99999'
         expected = (
-            u'https://iiif.elifesciences.org/digests:99999%2Ftest.jpg/full/full/0/default.jpg')
+            u'https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg')
         self.assertEqual(medium_post.digest_figure_image_url(
             self.digest_config, image, digest), expected)
 
@@ -118,7 +118,7 @@ class TestMediumFigure(unittest.TestCase):
         digest.doi = '10.7554/eLife.99999'
         expected = (
             u'<figure>' +
-            u'<img src="https://iiif.elifesciences.org/digests:99999%2Ftest.jpg/full/full/0/default.jpg" />' +
+            u'<img src="https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg" />' +
             u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>')
         self.assertEqual(medium_post.digest_figure_content(
             self.digest_config, image, digest), expected)
