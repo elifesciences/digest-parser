@@ -5,7 +5,7 @@ import copy
 from collections import OrderedDict
 import requests
 from elifetools.utils import copy_attribute
-from digestparser.utils import msid_from_doi
+from digestparser.utils import formatter_string, msid_from_doi
 from digestparser.jats import (parse_jats_file, parse_jats_digest, parse_jats_pub_date,
                                parse_jats_subjects, xml_to_html)
 from digestparser.build import build_digest
@@ -25,9 +25,8 @@ def iiif_server_info(info_url):
 
 def image_info(msid, file_name, digest_config):
     "get image info from the IIIF server"
-    if not msid or not file_name or not digest_config:
-        return {}
-    info_url = digest_config.get('iiif_info_url').format(msid=msid, file_name=file_name)
+    info_url = formatter_string(digest_config, 'iiif_info_url').format(
+        msid=msid, file_name=file_name)
     return iiif_server_info(info_url)
 
 
