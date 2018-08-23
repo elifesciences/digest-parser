@@ -64,6 +64,9 @@ def image_size(info):
 
 def image_json(digest, digest_config):
     "format image details into JSON format"
+    # need an image file name to continue
+    if not digest.image.file:
+        return None
     msid = str(msid_from_doi(digest.doi))
     image_file_name = os.path.split(digest.image.file)[-1]
     image = OrderedDict()
@@ -105,7 +108,7 @@ def content_paragraph(text):
     "create a content paragraph from the text"
     paragraph = OrderedDict()
     paragraph['type'] = 'paragraph'
-    paragraph['text'] = text
+    paragraph['text'] = xml_to_html(text)
     return paragraph
 
 
@@ -131,11 +134,13 @@ def digest_json(digest, digest_config, related=None):
     json_content['title'] = digest.title
     json_content['impactStatement'] = digest.summary
     # published date
-    json_content['published'] = str(digest.published)
+    if digest.published:
+        json_content['published'] = str(digest.published)
     # image
     content_image = image_json(digest, digest_config)
-    thumbnail_image = thumbnail_image_from_image_json(content_image)
-    json_content['image'] = thumbnail_image
+    if content_image:
+        thumbnail_image = thumbnail_image_from_image_json(content_image)
+        json_content['image'] = thumbnail_image
     # subjects
     if digest.subjects:
         json_content['subjects'] = digest.subjects
@@ -161,9 +166,7 @@ def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=Non
     # override the text and other details with the jats file digest content
     if jats_file_name:
         soup = parse_jats_file(jats_file_name)
-        jats_content = parse_jats_digest(soup)
-        if jats_content:
-            digest.text = map(xml_to_html, jats_content)
+        digest.text = parse_jats_digest(soup)
 
         # set the published date from the jats file
         pub_date = parse_jats_pub_date(soup)

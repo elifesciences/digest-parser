@@ -49,6 +49,22 @@ class TestJsonOutput(unittest.TestCase):
                 }],
             'expected_json_file': 'json_content_99999.py'
         },
+        {
+            'config_section': 'elife',
+            'file_name': 'DIGEST 99999.docx',
+            'jats_file': None,
+            'image_file_name': None,
+            'related': None,
+            'expected_json_file': 'json_content_docx_only_99999.py'
+        },
+        {
+            'config_section': 'elife',
+            'file_name': 'DIGEST 99999.docx',
+            'jats_file': 'elife-99999-v0.xml',
+            'image_file_name': None,
+            'related': None,
+            'expected_json_file': 'json_content_docx_and_jats_99999.py'
+        },
         )
     @patch.object(json_output, 'iiif_server_info')
     def test_build_json(self, test_data, fake_iiif_server_info):

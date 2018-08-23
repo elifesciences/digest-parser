@@ -15,6 +15,8 @@ def fixture_module_name(filename, folder_name=''):
 
 def fixture_file(filename, folder_name=''):
     "return the path of a file fixture to be read"
+    if filename is None:
+        return None
     return os.path.join(BASE_DIR, "tests", "fixtures", folder_name, filename)
 
 def read_fixture(filename, folder_name=''):
