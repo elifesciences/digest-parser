@@ -2,25 +2,25 @@
 
 from collections import OrderedDict
 
-expected = OrderedDict([
+EXPECTED = OrderedDict([
     ('id', u'99999'),
     ('title', u'Fishing for errors in the\xa0tests'),
     ('impactStatement', u'Testing a document which mimics the format of a file we’ve used  before plus CO<sub>2</sub> and Ca<sup>2+</sup>.'),
     ('published', '2018-08-01T00:00:00Z'),
     ('image', OrderedDict([
-            ('thumbnail', OrderedDict([
-                ('uri', 'https://iiif.elifesciences.org/digests/99999%2Fdigest-99999.jpg'),
-                ('alt', ''),
-                ('source', OrderedDict([
-                    ('mediaType', 'image/jpeg'),
-                    ('uri', 'https://iiif.elifesciences.org/digests/99999%2Fdigest-99999.jpg/full/full/0/default.jpg'),
-                    ('filename', 'digest-99999.jpg'),
-                    ])),
-                ('size', OrderedDict([
-                    ('width', 0),
-                    ('height', 0)
-                    ])),
+        ('thumbnail', OrderedDict([
+            ('uri', 'https://iiif.elifesciences.org/digests/99999%2Fdigest-99999.jpg'),
+            ('alt', ''),
+            ('source', OrderedDict([
+                ('mediaType', 'image/jpeg'),
+                ('uri', 'https://iiif.elifesciences.org/digests/99999%2Fdigest-99999.jpg/full/full/0/default.jpg'),
+                ('filename', 'digest-99999.jpg'),
                 ])),
+            ('size', OrderedDict([
+                ('width', 0),
+                ('height', 0)
+                ])),
+            ])),
         ])),
     ('subjects', [
         OrderedDict([
@@ -31,8 +31,7 @@ expected = OrderedDict([
             ('id', 'structural-biology-molecular-biophysics'),
             ('name', 'Structural Biology and Molecular Biophysics'),
             ]),
-        ]
-     ),
+        ]),
     ('content', [
         OrderedDict([
             ('type', 'paragraph'),
@@ -66,8 +65,7 @@ expected = OrderedDict([
             ('type', 'paragraph'),
             ('text', u'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?')
             ]),
-        ]
-     ),
+        ]),
     ('relatedContent', [
         OrderedDict([
             ('type', 'research-article'),
