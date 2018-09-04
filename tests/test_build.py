@@ -101,6 +101,71 @@ https://doi.org/10.7554/eLife.99999
         doi = build.build_doi(content, digest_config)
         self.assertEqual(doi, expected_doi)
 
+    @data(
+        {
+            'scenario': 'Basic simple example',
+            'content': 'Caption. Image credit: Anonymous (CC BY 4.0)',
+            'expected_caption': 'Caption.',
+            'expected_credit': 'Anonymous',
+            'expected_license_value': 'CC BY 4.0'
+        },
+        {
+            'scenario': 'Empty example',
+            'content': '',
+            'expected_caption': None,
+            'expected_credit': None,
+            'expected_license_value': None
+        },
+        {
+            'scenario': 'Image Credit (upper-case) no caption no license',
+            'content': 'Image Credit: Public domain',
+            'expected_caption': None,
+            'expected_credit': 'Public domain',
+            'expected_license_value': None
+        },
+        {
+            'scenario': 'No caption with image credit and license',
+            'content': 'Anonymous (CC0)',
+            'expected_caption': None,
+            'expected_credit': 'Anonymous',
+            'expected_license_value': 'CC0'
+        },
+        {
+            'scenario': 'A simple string',
+            'content': 'Anonymous',
+            'expected_caption': None,
+            'expected_credit': 'Anonymous',
+            'expected_license_value': None
+        },
+        {
+            'scenario': 'Extra parentheses',
+            'content': 'Caption (subtitle). Image credit: Anonymous (Anon.) (CC0)',
+            'expected_caption': 'Caption (subtitle).',
+            'expected_credit': 'Anonymous (Anon.)',
+            'expected_license_value': 'CC0'
+        },
+        )
+    def test_extract_image_content(self, test_data):
+        caption, credit, license_value = build.extract_image_content(test_data.get('content'))
+        self.assertEqual(
+            caption, test_data.get('expected_caption'),
+            'failed in scenario {scenario}, got caption {value}, expected {expected}'.format(
+                scenario=test_data.get('scenario'),
+                value=caption,
+                expected=test_data.get('expected_caption')))
+        self.assertEqual(
+            credit, test_data.get('expected_credit'),
+            'failed in scenario {scenario}, got credit {value}, expected {expected}'.format(
+                scenario=test_data.get('scenario'),
+                value=credit,
+                expected=test_data.get('expected_credit')))
+        self.assertEqual(
+            license_value, test_data.get('expected_license_value'),
+            'failed in scenario {scenario}, got license {value}, expected {expected}'.format(
+                scenario=test_data.get('scenario'),
+                value=license_value,
+                expected=test_data.get('expected_license_value')))
+
 
 if __name__ == '__main__':
     unittest.main()
