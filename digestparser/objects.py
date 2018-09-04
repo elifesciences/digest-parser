@@ -32,6 +32,4 @@ class Image(object):
 
     def __init__(self):
         self.caption = None
-        self.credit = None
-        self.license = None
         self.file = None

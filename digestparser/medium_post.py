@@ -41,28 +41,16 @@ def image_formatter(digest_config, format_name, content=None):
             image_url=utils.formatter_string(content, 'image_url'),
             figcaption=utils.formatter_string(content, 'figcaption'),
             caption=utils.formatter_string(content, 'caption'),
-            credit=utils.formatter_string(content, 'credit'),
-            license=utils.formatter_string(content, 'license'),
             file_name=utils.url_quote(utils.formatter_string(content, 'file_name')),
             msid=utils.formatter_string(content, 'msid'),
             )
     return string
 
 
-def digest_figure_license(image):
-    "license text used in the figure caption"
-    license_content = ''
-    if image.license:
-        license_content = ' (' + image.license + ')'
-    return license_content
-
-
 def digest_figure_caption_content(digest_config, image):
     "figure caption based on the pattern in the config file"
     content = {
-        'caption': image.caption + ' ',
-        'credit': image.credit,
-        'license': digest_figure_license(image)
+        'caption': image.caption
         }
     return image_formatter(digest_config, 'medium_figcaption_pattern', content)
 
