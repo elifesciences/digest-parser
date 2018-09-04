@@ -144,6 +144,13 @@ https://doi.org/10.7554/eLife.99999
             'expected_credit': 'Anonymous (Anon.)',
             'expected_license_value': 'CC0'
         },
+        {
+            'scenario': 'Trick for a caption only',
+            'content': 'Caption. Image credit:',
+            'expected_caption': 'Caption.',
+            'expected_credit': None,
+            'expected_license_value': None
+        },
         )
     def test_extract_image_content(self, test_data):
         caption, credit, license_value = build.extract_image_content(test_data.get('content'))
