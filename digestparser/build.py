@@ -1,7 +1,7 @@
+import re
 from digestparser.parse import parse_content
 from digestparser.objects import Digest, Image
 from digestparser.zip import unzip_zip
-from digestparser.conf import raw_config, parse_raw_config
 
 
 SECTION_MAP = {
@@ -93,12 +93,23 @@ def extract_image_content(content):
     credit = None
     license_value = None
     # split the content into separate values
-    first_parts = content.split('Image credit:')
-    caption = first_parts[0].rstrip()
-    # continue to split up the final parts
-    second_parts = first_parts[1].split('(')
-    credit = second_parts[0].lstrip().rstrip()
-    license_value = second_parts[1].rstrip(' )')
+    first_parts = re.split(r'Image [cC]redit:', content)
+    second_parts = None
+    if first_parts and len(first_parts) > 1:
+        if first_parts[0]:
+            caption = first_parts[0].rstrip()
+        second_parts = first_parts[1].split('(')
+    else:
+        # Image credit not present, then no caption, use the content as the second part
+        second_parts = content.split('(')
+    # continue to split up the credit and license
+    if second_parts:
+        if len(second_parts) == 1:
+            if second_parts[0]:
+                credit = ''.join(second_parts[0]).lstrip().rstrip()
+        else:
+            credit = '('.join(second_parts[0:-1]).lstrip().rstrip()
+            license_value = second_parts[-1].rstrip(' )')
     return caption, credit, license_value
 
 
