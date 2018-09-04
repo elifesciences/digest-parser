@@ -25,8 +25,6 @@ class TestObjects(unittest.TestCase):
         image =  objects.Image()
         self.assertIsNotNone(image, "image object is None")
         self.assertIsNone(image.caption, "new image caption is not None")
-        self.assertIsNone(image.credit, "new image credit is not None")
-        self.assertIsNone(image.license, "new image license is not None")
         self.assertIsNone(image.file, "new image file is not None")
 
 
