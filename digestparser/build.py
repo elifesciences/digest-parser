@@ -2,7 +2,6 @@ import re
 from digestparser.parse import parse_content
 from digestparser.objects import Digest, Image
 from digestparser.zip import unzip_zip
-from digestparser.conf import raw_config, parse_raw_config
 
 
 SECTION_MAP = {
