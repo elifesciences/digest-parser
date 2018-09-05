@@ -135,9 +135,9 @@ def digest_json(digest, digest_config, related=None):
     content = []
     for text in digest.text:
         content.append(content_paragraph(text))
-    # insert the image after paragraph 2
+    # insert the image before the first paragraph
     if content_image:
-        content.insert(2, content_image)
+        content.insert(0, content_image)
     json_content['content'] = content
     # related content
     if related is not None:
