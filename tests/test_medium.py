@@ -66,15 +66,11 @@ class TestMockClient(unittest.TestCase):
         self.assertEqual(post, create_post_return)
 
 
-def build_image(caption=None, credit=None, license_value=None, file_value=None):
+def build_image(caption=None, file_value=None):
     "build an Image object for testing"
     image = Image()
     if caption:
         image.caption = caption
-    if credit:
-        image.credit = credit
-    if license_value:
-        image.license = license_value
     if file_value:
         image.file = file_value
     return image
@@ -85,16 +81,10 @@ class TestMediumFigure(unittest.TestCase):
     def setUp(self):
         self.digest_config = parse_raw_config(raw_config('elife'))
 
-    def test_digest_figure_license(self):
-        "test figure license content formatting"
-        image = build_image(license_value=u'CC BY\xa04.0')
-        expected = u' (CC BY\xa04.0)'
-        self.assertEqual(medium_post.digest_figure_license(image), expected)
-
     def test_digest_figure_caption_content(self):
         "test figure caption content formatting"
         image = build_image(
-            caption='Caption.', credit='Anonymous', license_value=u'CC BY\xa04.0', file_value='')
+            caption=u'Caption. Anonymous (CC BY\xa04.0)', file_value='')
         expected = u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption>'
         self.assertEqual(medium_post.digest_figure_caption_content(
             self.digest_config, image), expected)
@@ -112,8 +102,7 @@ class TestMediumFigure(unittest.TestCase):
     def test_digest_figure_content(self):
         "test figure caption formatting"
         image = build_image(
-            caption='Caption.', credit='Anonymous',
-            license_value=u'CC BY\xa04.0', file_value='test.jpg')
+            caption=u'Caption. Anonymous (CC BY\xa04.0)', file_value='test.jpg')
         digest = Digest()
         digest.doi = '10.7554/eLife.99999'
         expected = (

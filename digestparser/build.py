@@ -1,7 +1,7 @@
+import re
 from digestparser.parse import parse_content
 from digestparser.objects import Digest, Image
 from digestparser.zip import unzip_zip
-from digestparser.conf import raw_config, parse_raw_config
 
 
 SECTION_MAP = {
@@ -88,30 +88,12 @@ def build_text(content):
     return build_list('text', content)
 
 
-def extract_image_content(content):
-    caption = None
-    credit = None
-    license_value = None
-    # split the content into separate values
-    first_parts = content.split('Image credit:')
-    caption = first_parts[0].rstrip()
-    # continue to split up the final parts
-    second_parts = first_parts[1].split('(')
-    credit = second_parts[0].lstrip().rstrip()
-    license_value = second_parts[1].rstrip(' )')
-    return caption, credit, license_value
-
-
 def build_image(content, image_file_name=None):
     image_content = build_singleton('image', content)
     if not image_content:
         return None
     image_object = Image()
-    # extract the content parts
-    caption, credit, license_value = extract_image_content(image_content)
-    image_object.caption = caption
-    image_object.credit = credit
-    image_object.license = license_value
+    image_object.caption = image_content
     if image_file_name:
         image_object.file = image_file_name
     return image_object

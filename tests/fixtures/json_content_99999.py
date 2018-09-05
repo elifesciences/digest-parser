@@ -46,9 +46,6 @@ EXPECTED = OrderedDict([
             ('image', OrderedDict([
                 ('uri', 'https://iiif.elifesciences.org/digests/99999%2Fdigest-99999.jpg'),
                 ('alt', ''),
-                ('attribution', [
-                    u'Anonymous and Anonymous, CC BY\u00a04.0'
-                    ]),
                 ('source', OrderedDict([
                     ('mediaType', 'image/jpeg'),
                     ('uri', 'https://iiif.elifesciences.org/digests/99999%2Fdigest-99999.jpg/full/full/0/default.jpg'),
@@ -59,7 +56,7 @@ EXPECTED = OrderedDict([
                     ('height', 0)
                     ])),
                 ])),
-            ('title', u'<b>It\u2019s not just mammals who can recognise sample data.</b>'),
+            ('title', u'<b>It\u2019s not just mammals who can recognise sample data.</b>\u00a0Image credit:\u00a0Anonymous and Anonymous\u00a0(CC BY\u00a04.0)'),
         ]),
         OrderedDict([
             ('type', 'paragraph'),

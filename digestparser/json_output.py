@@ -30,14 +30,6 @@ def image_info(msid, file_name, digest_config):
     return iiif_server_info(info_url)
 
 
-def image_attribution(credit, image_license):
-    "concatenate an image attribution"
-    attribution = []
-    attribution_line = ', '.join([part for part in [credit, image_license] if part])
-    attribution.append(attribution_line)
-    return attribution
-
-
 def image_uri(msid, file_name, digest_config):
     "uri of the image file as defined in the settings"
     return digest_config.get('iiif_image_uri').format(msid=msid, file_name=file_name)
@@ -76,9 +68,6 @@ def image_json(digest, digest_config):
     # medium_image_url
     image_details['uri'] = image_uri(msid, image_file_name, digest_config)
     image_details['alt'] = ''
-    attribution = image_attribution(digest.image.credit, digest.image.license)
-    if attribution:
-        image_details['attribution'] = attribution
     source = image_source(msid, image_file_name, digest_config)
     image_details['source'] = source
     # populate with IIIF server data
@@ -96,8 +85,6 @@ def thumbnail_image_from_image_json(image_json):
     # delete some data
     del thumbnail_image_json['type']
     del thumbnail_image_json['title']
-    if thumbnail_image_json['image'].get('attribution'):
-        del thumbnail_image_json['image']['attribution']
     # change the index name
     thumbnail_image_json['thumbnail'] = thumbnail_image_json['image']
     del thumbnail_image_json['image']

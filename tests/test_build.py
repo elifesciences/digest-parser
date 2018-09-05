@@ -39,9 +39,8 @@ class TestBuild(unittest.TestCase):
         expected_text_0 = read_fixture('digest_content_99999_text_1.txt').decode('utf-8')
         expected_text_1 = read_fixture('digest_content_99999_text_2.txt').decode('utf-8')
         expected_text_2 = read_fixture('digest_content_99999_text_3.txt').decode('utf-8')
-        expected_image_caption = u'<b>It’s not just mammals who can recognise sample data.</b>'
-        expected_image_credit = u'Anonymous and Anonymous'
-        expected_image_license = u'CC BY 4.0'
+        expected_image_caption = (u'<b>It’s not just mammals who can recognise sample data.</b>' +
+                                  u'\xa0Image credit:\xa0Anonymous and Anonymous\xa0(CC BY\xa04.0)')
         # build now
         digest_config = parse_raw_config(raw_config(test_data.get('config_section')))
         digest = build.build_digest(test_data_path(test_data.get('file_name')),
@@ -59,8 +58,6 @@ class TestBuild(unittest.TestCase):
         self.assertEqual(digest.text[2], expected_text_2)
         if digest.image:
             self.assertEqual(digest.image.caption, expected_image_caption)
-            self.assertEqual(digest.image.credit, expected_image_credit)
-            self.assertEqual(digest.image.license, expected_image_license)
             if test_data.get('image_file'):
                 expected_image_file = os.path.join('tmp', test_data.get('image_file'))
                 self.assertEqual(digest.image.file, expected_image_file)
@@ -69,11 +66,11 @@ class TestBuild(unittest.TestCase):
         "test parsing from blank content for coverage"
         self.assertIsNone(build.build_singleton('title', ''))
 
-    def test_build_keywords_blank_conten(self):
+    def test_build_keywords_blank_content(self):
         "test parsing keywords from blank content for coverage"
         self.assertIsNone(build.build_keywords(''))
 
-    def test_build_image_blank_conten(self):
+    def test_build_image_blank_content(self):
         "test parsing image content from blank content for coverage"
         self.assertIsNone(build.build_image(''))
 
