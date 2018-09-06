@@ -48,8 +48,13 @@ EXPECTED = OrderedDict([
                     ('height', 0)
                     ])),
                 ])),
-            ('title', u'<b>It\u2019s not just mammals who can recognise sample data.</b>\u00a0Image credit:\u00a0Anonymous and Anonymous\u00a0(CC BY\u00a04.0)'),
-        ]),
+            ('caption', [
+                OrderedDict([
+                    ('type', 'paragraph'),
+                    ('text', u'<b>It\u2019s not just mammals who can recognise sample data.</b>\u00a0Image credit:\u00a0Anonymous and Anonymous\u00a0(CC BY\u00a04.0)')
+                    ]),
+                ]),
+            ]),
         OrderedDict([
             ('type', 'paragraph'),
             ('text', u'Truely being able to recognize sample data is crucial for social interactions in humans. This is also added, CO<sub>2</sub> or Ca<sup>2+</sup>, &amp; 1 &lt; 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')

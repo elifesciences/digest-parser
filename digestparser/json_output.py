@@ -75,7 +75,8 @@ def image_json(digest, digest_config):
     size = image_size(info)
     image_details['size'] = size
     image['image'] = image_details
-    image['title'] = digest.image.caption
+    if digest.image.caption:
+        image['caption'] = [(content_paragraph(digest.image.caption))]
     return image
 
 
@@ -84,7 +85,7 @@ def thumbnail_image_from_image_json(image_json):
     thumbnail_image_json = copy.deepcopy(image_json)
     # delete some data
     del thumbnail_image_json['type']
-    del thumbnail_image_json['title']
+    del thumbnail_image_json['caption']
     # change the index name
     thumbnail_image_json['thumbnail'] = thumbnail_image_json['image']
     del thumbnail_image_json['image']
