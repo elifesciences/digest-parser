@@ -70,8 +70,3 @@ def url_quote(string):
         # python 3
         return urllib.parse.quote(string)
     return urllib.quote(string)
-
-
-def subject_slug(subject):
-    "create a slug for a subject value"
-    return slugify(subject, stopwords=['and', 'of'])

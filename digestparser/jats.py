@@ -2,10 +2,9 @@
 
 from collections import OrderedDict
 from elifetools import parseJATS as parser
-from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand
+from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand, subject_slug
 from elifetools.utils_html import replace_simple_tags
 from digestparser.build import build_digest
-from digestparser.utils import subject_slug
 
 
 def allowed_xml_tag_fragments():
