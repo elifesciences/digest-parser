@@ -4,7 +4,7 @@ import os
 from collections import OrderedDict
 from medium import Client
 from digestparser.build import build_digest
-from digestparser.jats import parse_jats_digest, xml_to_html
+from digestparser.jats import parse_jats_file, parse_jats_digest, xml_to_html
 from digestparser.html import string_to_html
 from digestparser.conf import raw_config, parse_raw_config
 import digestparser.utils as utils
@@ -132,7 +132,8 @@ def build_medium_content(file_name, digest_config=None, jats_file_name=None):
 
     # override the text with the jats file digest content
     if jats_file_name:
-        jats_content = parse_jats_digest(jats_file_name)
+        soup = parse_jats_file(jats_file_name)
+        jats_content = parse_jats_digest(soup)
         if jats_content:
             digest.text = map(xml_to_html, jats_content)
 

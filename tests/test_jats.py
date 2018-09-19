@@ -66,7 +66,8 @@ class TestJats(unittest.TestCase):
 
     def test_parse_jats_digest(self):
         "extract text content from a JATS file abstract digest"
-        content = jats.parse_jats_digest(fixture_file('elife-99999-v0.xml'))
+        soup = jats.parse_jats_file(fixture_file('elife-99999-v0.xml'))
+        content = jats.parse_jats_digest(soup)
         expected_content = read_fixture('elife_99999_v0_digest.py')
         self.assertEqual(content, expected_content)
 

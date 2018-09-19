@@ -1,7 +1,8 @@
 "build JATS XML output from digest content"
 
+from collections import OrderedDict
 from elifetools import parseJATS as parser
-from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand
+from elifetools.utils import escape_unmatched_angle_brackets, escape_ampersand, subject_slug
 from elifetools.utils_html import replace_simple_tags
 from digestparser.build import build_digest
 
@@ -71,11 +72,33 @@ def split_paragraphs(string):
     return content
 
 
-def parse_jats_digest(jats_file_name):
-    "extract the digest paragraphs from a jats file"
-    soup = parser.parse_document(jats_file_name)
+def parse_jats_file(jats_file_name):
+    "parse the jats file into a BeautifulSoup object"
+    return parser.parse_document(jats_file_name)
+
+
+def parse_jats_digest(soup):
+    "extract the digest paragraphs from soup"
     jats_digest = parser.full_digest(soup)
     return split_paragraphs(jats_digest)
+
+
+def parse_jats_pub_date(soup):
+    "extract the pub date from the soup"
+    pub_date = parser.pub_date(soup)
+    return pub_date
+
+
+def parse_jats_subjects(soup):
+    "extract the subject categories from the soup and format them as json"
+    subjects = []
+    categories = parser.category(soup)
+    for category in categories:
+        subject = OrderedDict()
+        subject['id'] = subject_slug(category)
+        subject['name'] = category
+        subjects.append(subject)
+    return subjects
 
 
 def build_jats(file_name):

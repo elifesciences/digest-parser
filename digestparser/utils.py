@@ -3,6 +3,7 @@
 "utility helper functions"
 import re
 import urllib
+from slugify import slugify
 
 
 def unicode_decode(string):
