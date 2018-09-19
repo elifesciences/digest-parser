@@ -104,7 +104,7 @@ class TestJsonOutput(unittest.TestCase):
         "test the iiif server connection mocking requests"
         fake_get.return_value = FakeResponse({'width': 100})
         expected_info = {'width': 100}
-        self.assertEqual(json_output.iiif_server_info(None), expected_info)
+        self.assertEqual(json_output.iiif_server_info('http://iiif'), expected_info)
 
     @patch.object(json_output.requests, 'get')
     def test_iiif_server_info_error(self, fake_get):
@@ -112,7 +112,7 @@ class TestJsonOutput(unittest.TestCase):
         fake_get.side_effect = RuntimeError()
         fake_get.return_value = FakeResponse({'width': 100})
         expected_info = {}
-        self.assertEqual(json_output.iiif_server_info(None), expected_info)
+        self.assertEqual(json_output.iiif_server_info('http://iiif-error'), expected_info)
 
 
 if __name__ == '__main__':

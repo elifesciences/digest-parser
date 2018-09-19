@@ -9,17 +9,21 @@ from digestparser.utils import formatter_string, msid_from_doi
 from digestparser.jats import (parse_jats_file, parse_jats_digest, parse_jats_pub_date,
                                parse_jats_subjects, xml_to_html)
 from digestparser.build import build_digest
+from digestparser import LOGGER
 
 
 def iiif_server_info(info_url):
     "get the image info from the IIIF server"
     info = {}
+    if not info_url:
+        return info
     try:
         response = requests.get(info_url)
         info = response.json()
-    except:
+    except Exception as exception:
         # could be any error right now
-        pass
+        LOGGER.exception("Exception in iiif_server_info for GET %s. Details: %s",
+                         info_url, str(exception))
     return info
 
 
