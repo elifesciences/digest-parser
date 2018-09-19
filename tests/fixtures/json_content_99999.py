@@ -17,8 +17,8 @@ EXPECTED = OrderedDict([
                 ('filename', 'digest-99999.jpg'),
                 ])),
             ('size', OrderedDict([
-                ('width', 0),
-                ('height', 0)
+                ('width', 800),
+                ('height', 600)
                 ])),
             ])),
         ])),
@@ -44,8 +44,8 @@ EXPECTED = OrderedDict([
                     ('filename', 'digest-99999.jpg'),
                     ])),
                 ('size', OrderedDict([
-                    ('width', 0),
-                    ('height', 0)
+                    ('width', 800),
+                    ('height', 600)
                     ])),
                 ])),
             ('caption', [

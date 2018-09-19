@@ -29,12 +29,12 @@ class TestJsonOutput(unittest.TestCase):
 
     @data(
         {
-            'comment': 'all possible input data',
+            'comment': 'docx, JATS and image input data',
             'config_section': 'elife',
             'file_name': 'DIGEST 99999.zip',
             'jats_file': 'elife-99999-v0.xml',
             'image_file_name': 'digest-99999.jpg',
-            'iiif_info': {'width': 0, 'height': 0},
+            'iiif_info': {'width': 800, 'height': 600},
             'related': [{
                 'id': '99999',
                 'type': 'research-article',
