@@ -48,10 +48,11 @@ def image_source(msid, file_name, digest_config):
 def image_size(info):
     "size of the iiif image from the info"
     size = OrderedDict()
-    # get the size from the json
-    size['width'] = info.get('width')
-    size['height'] = info.get('height')
-    return size
+    for dimension in ['width', 'height']:
+        copy_attribute(info, dimension, size)
+    # only return size if it is non-empty
+    if size:
+        return size
 
 
 def image_json(digest, digest_config):
@@ -73,7 +74,8 @@ def image_json(digest, digest_config):
     # populate with IIIF server data
     info = image_info(msid, image_file_name, digest_config)
     size = image_size(info)
-    image_details['size'] = size
+    if size:
+        image_details['size'] = size
     image['image'] = image_details
     if digest.image.caption:
         image['caption'] = [(content_paragraph(digest.image.caption))]

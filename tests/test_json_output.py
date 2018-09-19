@@ -29,10 +29,12 @@ class TestJsonOutput(unittest.TestCase):
 
     @data(
         {
+            'comment': 'all possible input data',
             'config_section': 'elife',
             'file_name': 'DIGEST 99999.zip',
             'jats_file': 'elife-99999-v0.xml',
             'image_file_name': 'digest-99999.jpg',
+            'iiif_info': {'width': 0, 'height': 0},
             'related': [{
                 'id': '99999',
                 'type': 'research-article',
@@ -50,6 +52,14 @@ class TestJsonOutput(unittest.TestCase):
             'expected_json_file': 'json_content_99999.py'
         },
         {
+            'comment': 'an image but no IIIF size data',
+            'config_section': 'elife',
+            'file_name': 'DIGEST 99999.zip',
+            'image_file_name': 'digest-99999.jpg',
+            'expected_json_file': 'json_content_no_iiif_99999.py'
+        },
+        {
+            'comment': 'JSON output from a docx input only',
             'config_section': 'elife',
             'file_name': 'DIGEST 99999.docx',
             'jats_file': None,
@@ -58,6 +68,7 @@ class TestJsonOutput(unittest.TestCase):
             'expected_json_file': 'json_content_docx_only_99999.py'
         },
         {
+            'comment': 'JSON output from a docx and JATS file only',
             'config_section': 'elife',
             'file_name': 'DIGEST 99999.docx',
             'jats_file': 'elife-99999-v0.xml',
@@ -69,7 +80,7 @@ class TestJsonOutput(unittest.TestCase):
     @patch.object(json_output, 'iiif_server_info')
     def test_build_json(self, test_data, fake_iiif_server_info):
         "check building a JSON from a DOCX file"
-        fake_iiif_server_info.return_value = {'width': 0, 'height': 0}
+        fake_iiif_server_info.return_value = test_data.get('iiif_info')
         file_name = test_data_path(test_data.get('file_name'))
         jats_file = fixture_file(test_data.get('jats_file'))
         expected_json = read_fixture(test_data.get('expected_json_file'))
@@ -81,7 +92,8 @@ class TestJsonOutput(unittest.TestCase):
         json_content = json_output.build_json(file_name, 'tmp', digest_config,
                                               jats_file, image_file_name, related)
         # assert assertions
-        self.assertEqual(json_content, expected_json)
+        self.assertEqual(json_content, expected_json,
+                         'failed in {comment}'.format(comment=test_data.get("comment")))
 
     def test_image_info_missing_data(self):
         "test missing data when requesting IIIF server info for coverage"
