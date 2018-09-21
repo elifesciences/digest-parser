@@ -57,12 +57,13 @@ def image_size(info):
     # only return size if it is non-empty
     if size:
         return size
+    return None
 
 
 def image_json(digest, digest_config):
     "format image details into JSON format"
     # need an image file name to continue
-    if not digest.image.file:
+    if not digest.image or not digest.image.file:
         return None
     msid = str(msid_from_doi(digest.doi))
     image_file_name = os.path.split(digest.image.file)[-1]
@@ -140,8 +141,9 @@ def digest_json(digest, digest_config, related=None):
         json_content['subjects'] = digest.subjects
     # content
     content = []
-    for text in digest.text:
-        content.append(content_paragraph(text))
+    if digest.text:
+        for text in digest.text:
+            content.append(content_paragraph(text))
     # insert the image before the first paragraph
     if content_image:
         content.insert(0, content_image)

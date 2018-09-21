@@ -1,9 +1,11 @@
 # coding=utf-8
 
 import unittest
+from collections import OrderedDict
 from mock import patch
 from ddt import ddt, data
 from digestparser import json_output
+from digestparser.objects import Digest
 from digestparser.conf import raw_config, parse_raw_config
 from tests import read_fixture, test_data_path, fixture_file
 
@@ -113,6 +115,21 @@ class TestJsonOutput(unittest.TestCase):
         fake_get.return_value = FakeResponse({'width': 100})
         expected_info = {}
         self.assertEqual(json_output.iiif_server_info('http://iiif-error'), expected_info)
+
+    def test_digest_json_empty(self):
+        "test json output for an empty digest where there is no text or image file"
+        digest = Digest()
+        # reset some lists to None for testing
+        digest.text = None
+        digest.keywords = None
+        digest.subjects = None
+        expected = OrderedDict([
+            ('id', 'None'),
+            ('title', None),
+            ('impactStatement', None),
+            ('content', [])
+            ])
+        self.assertEqual(json_output.digest_json(digest, None), expected)
 
 
 if __name__ == '__main__':
