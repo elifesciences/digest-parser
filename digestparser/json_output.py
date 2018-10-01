@@ -18,8 +18,10 @@ def iiif_server_info(info_url):
     if not info_url:
         return info
     try:
+        LOGGER.info("Loading IIIF info: %s", info_url)
         response = requests.get(info_url)
         info = response.json()
+        LOGGER.info("IIIF info for %s: %s", info_url, info)
     except Exception as exception:
         # could be any error right now
         LOGGER.exception("Exception in iiif_server_info for GET %s. Details: %s",
