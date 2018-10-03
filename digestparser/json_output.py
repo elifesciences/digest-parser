@@ -166,11 +166,6 @@ def build_json(file_name, temp_dir='tmp', digest_config=None, jats_file_name=Non
         soup = parse_jats_file(jats_file_name)
         digest.text = parse_jats_digest(soup)
 
-        # set the published date from the jats file
-        pub_date = parse_jats_pub_date(soup)
-        if pub_date:
-            digest.published = time.strftime("%Y-%m-%dT%H:%M:%SZ", pub_date)
-
         # add subjects from the jats file
         digest.subjects = parse_jats_subjects(soup)
 
