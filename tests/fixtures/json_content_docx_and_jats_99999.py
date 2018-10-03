@@ -6,7 +6,6 @@ EXPECTED = OrderedDict([
     ('id', u'99999'),
     ('title', u'Fishing for errors in the\xa0tests'),
     ('impactStatement', u'Testing a document which mimics the format of a file we’ve used  before plus CO<sub>2</sub> and Ca<sup>2+</sup>.'),
-    ('published', '2018-08-01T00:00:00Z'),
     ('subjects', [
         OrderedDict([
             ('id', 'biochemistry-chemical-biology'),
