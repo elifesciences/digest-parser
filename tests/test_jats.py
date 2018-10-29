@@ -2,6 +2,7 @@
 
 import unittest
 from ddt import ddt, data
+from elifetools.utils import date_struct
 from tests import read_fixture, test_data_path, fixture_file
 from digestparser.objects import Digest
 from digestparser import jats
@@ -70,6 +71,12 @@ class TestJats(unittest.TestCase):
         content = jats.parse_jats_digest(soup)
         expected_content = read_fixture('elife_99999_v0_digest.py')
         self.assertEqual(content, expected_content)
+
+    def test_parse_jats_pub_date(self):
+        "extract pub date from a JATS file"
+        soup = jats.parse_jats_file(fixture_file('elife-99999-v0.xml'))
+        pub_date = jats.parse_jats_pub_date(soup)
+        self.assertEqual(pub_date, date_struct(2018, 8, 1))
 
 
 if __name__ == '__main__':

@@ -101,8 +101,8 @@ def parse_jats_subjects(soup):
     return subjects
 
 
-def build_jats(file_name):
+def build_jats(file_name, temp_dir='tmp', digest_config=None):
     "build a digest object from a DOCX input file"
-    digest = build_digest(file_name)
+    digest = build_digest(file_name, temp_dir, digest_config)
     jats_content = digest_jats(digest)
     return jats_content
