@@ -131,6 +131,19 @@ class TestJsonOutput(unittest.TestCase):
             ])
         self.assertEqual(json_output.digest_json(digest, None), expected)
 
+    def test_digest_json_published_value(self):
+        "test json output for a digest with a published value"
+        digest = Digest()
+        digest.published = '2018-10-29'
+        expected = OrderedDict([
+            ('id', 'None'),
+            ('title', None),
+            ('impactStatement', None),
+            ('published', '2018-10-29'),
+            ('content', [])
+            ])
+        self.assertEqual(json_output.digest_json(digest, None), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
