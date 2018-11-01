@@ -5,7 +5,7 @@ from mock import patch
 from digestparser.conf import raw_config, parse_raw_config
 from digestparser.objects import Image, Digest
 from digestparser import medium_post
-from tests import read_fixture, test_data_path, fixture_file
+from tests import read_fixture, data_path, fixture_file
 
 
 class MockClient(object):
@@ -117,7 +117,7 @@ class TestMediumFigure(unittest.TestCase):
         docx_file = 'DIGEST 99999.docx'
         expected_medium_content = read_fixture('medium_content_99999.py')
         # build the digest object
-        medium_content = medium_post.build_medium_content(test_data_path(docx_file),
+        medium_content = medium_post.build_medium_content(data_path(docx_file),
                                                           self.digest_config)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
@@ -129,7 +129,7 @@ class TestMediumFigure(unittest.TestCase):
         expected_medium_content = read_fixture('medium_content_jats_99999.py')
         # build the digest object
         medium_content = medium_post.build_medium_content(
-            test_data_path(docx_file), self.digest_config, jats_file)
+            data_path(docx_file), self.digest_config, jats_file)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 

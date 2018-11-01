@@ -3,7 +3,7 @@
 import unittest
 from ddt import ddt, data
 from elifetools.utils import date_struct
-from tests import read_fixture, test_data_path, fixture_file
+from tests import read_fixture, data_path, fixture_file
 from digestparser.objects import Digest
 from digestparser import jats
 
@@ -47,7 +47,7 @@ class TestJats(unittest.TestCase):
         "check building JATS XML content from a DOCX file"
         docx_file = 'DIGEST 99999.docx'
         expected_content = read_fixture('jats_content_99999.txt').decode('utf-8')
-        jats_content = jats.build_jats(test_data_path(docx_file))
+        jats_content = jats.build_jats(data_path(docx_file))
         self.assertEqual(jats_content, expected_content)
 
     @data(

@@ -7,7 +7,7 @@ from ddt import ddt, data
 from digestparser import json_output
 from digestparser.objects import Digest
 from digestparser.conf import raw_config, parse_raw_config
-from tests import read_fixture, test_data_path, fixture_file
+from tests import read_fixture, data_path, fixture_file
 
 
 class FakeResponse(object):
@@ -83,7 +83,7 @@ class TestJsonOutput(unittest.TestCase):
     def test_build_json(self, test_data, fake_iiif_server_info):
         "check building a JSON from a DOCX file"
         fake_iiif_server_info.return_value = test_data.get('iiif_info')
-        file_name = test_data_path(test_data.get('file_name'))
+        file_name = data_path(test_data.get('file_name'))
         jats_file = fixture_file(test_data.get('jats_file'))
         expected_json = read_fixture(test_data.get('expected_json_file'))
         # config

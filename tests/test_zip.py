@@ -2,7 +2,7 @@
 
 import unittest
 from ddt import ddt, data, unpack
-from tests import test_data_path
+from tests import data_path
 from digestparser.zip import profile_zip
 
 
@@ -19,7 +19,7 @@ class TestZip(unittest.TestCase):
     @unpack
     def test_profile_zip(self, zip_file, expected_docx, expected_image):
         "test parsing of zip file to find the docx and image file names"
-        docx, image = profile_zip(test_data_path(zip_file))
+        docx, image = profile_zip(data_path(zip_file))
         self.assertEqual(docx, expected_docx,
                          'file_name {file_name}, expected {expected}, got {output}'.format(
                              file_name=zip_file, expected=expected_docx, output=docx))
