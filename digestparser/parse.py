@@ -1,3 +1,4 @@
+import sys
 from docx import Document
 
 
@@ -115,7 +116,10 @@ def join_runs(runs):
 
 if __name__ == "__main__":
     # debug while developing
-    DIGEST_CONTENT = parse_content('tests/test_data/DIGEST 99999.docx')
+    if len(sys.argv) != 2:
+        sys.exit("Usage: python {0} DOCX_FILE\nExample: python {0} 'tests/test_data/DIGEST 99999.docx'".format(*sys.argv))
+
+    DIGEST_CONTENT = parse_content(sys.argv[1])
     print(DIGEST_CONTENT.encode('utf-8'))
 
     """
