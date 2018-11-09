@@ -109,7 +109,7 @@ class TestParse(unittest.TestCase):
         output = parse.join_runs(paragraph.runs)
         self.assertEqual(output, '<b>bold</b> <i>italic.</i>')
 
-    def test_join_runs_italic_italic(self):
+    def test_join_runs_italic_bold(self):
         "test to join italic run before a bold run"
         document = Document()
         paragraph = document.add_paragraph('')
