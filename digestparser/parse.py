@@ -95,10 +95,12 @@ def run_open_close_style(run, prev_run, output, attribute):
 
 def join_run_tags(run, prev_run, output=''):
     "process all the possible tags in the run"
-    output = run_open_close_style(run, prev_run, output, 'italic')
-    output = run_open_close_style(run, prev_run, output, 'bold')
-    output = run_open_close_style(run, prev_run, output, 'subscript')
-    output = run_open_close_style(run, prev_run, output, 'superscript')
+    style_order = ['italic', 'bold', 'subscript', 'superscript']
+    if run_has_attr(prev_run, 'bold'):
+        # close bold tags first if previous run was bold
+        style_order = ['bold', 'italic', 'subscript', 'superscript']
+    for style in style_order:
+        output = run_open_close_style(run, prev_run, output, style)
     return output
 
 

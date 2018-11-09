@@ -1,5 +1,6 @@
 import unittest
 from ddt import ddt, data
+from docx import Document
 from digestparser import parse
 from tests import read_fixture, test_data_path
 
@@ -98,6 +99,24 @@ class TestParse(unittest.TestCase):
             test_data.get('output'),
             test_data.get('attribute')),
                          test_data.get('expected'))
+
+    def test_join_runs_bold_italic(self):
+        "test to join bold run before an italic run"
+        document = Document()
+        paragraph = document.add_paragraph('')
+        paragraph.add_run('bold ').bold = True
+        paragraph.add_run('italic.').italic = True
+        output = parse.join_runs(paragraph.runs)
+        self.assertEqual(output, '<b>bold</b> <i>italic.</i>')
+
+    def test_join_runs_italic_bold(self):
+        "test to join italic run before a bold run"
+        document = Document()
+        paragraph = document.add_paragraph('')
+        paragraph.add_run('italic ').italic = True
+        paragraph.add_run('bold.').bold = True
+        output = parse.join_runs(paragraph.runs)
+        self.assertEqual(output, '<i>italic</i> <b>bold.</b>')
 
 
 if __name__ == '__main__':
