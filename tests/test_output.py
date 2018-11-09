@@ -8,7 +8,7 @@ from digestparser.objects import Digest
 from digestparser.parse import parse_content
 from digestparser.build import build_digest
 from digestparser.conf import raw_config, parse_raw_config
-from tests import test_data_path, fixture_file
+from tests import data_path, fixture_file
 
 
 @ddt
@@ -28,12 +28,12 @@ class TestOutput(unittest.TestCase):
         "check building a DOCX from a DOCX file"
         file_name = test_data.get('file_name')
         output_dir = test_data.get('output_dir')
-        digest = build_digest(test_data_path(file_name))
+        digest = build_digest(data_path(file_name))
         output_file_name = output.docx_file_name(digest)
         expected_fixture = fixture_file(test_data.get('expected_docx_file'))
         # build now
         full_file_name = os.path.join(output_dir, output_file_name)
-        docx_file = output.build_docx(test_data_path(file_name), full_file_name)
+        docx_file = output.build_docx(data_path(file_name), full_file_name)
         # assert assertions
         self.assertEqual(docx_file, os.path.join(output_dir, output_file_name))
         # parse and compare the content of the built docx and the fixture docx

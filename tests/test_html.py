@@ -2,7 +2,7 @@
 
 import unittest
 from digestparser import build, html
-from tests import read_fixture, test_data_path
+from tests import read_fixture, data_path
 
 
 class TestHtml(unittest.TestCase):
@@ -28,7 +28,7 @@ class TestHtml(unittest.TestCase):
         expected_text_2 = read_fixture('html_content_99999_text_2.txt').decode('utf-8')
         expected_text_3 = read_fixture('html_content_99999_text_3.txt').decode('utf-8')
         # build the digest object
-        digest = build.build_digest(test_data_path(docx_file))
+        digest = build.build_digest(data_path(docx_file))
         # test assertions
         self.assertEqual(html.string_to_html(digest.title), expected_title)
         self.assertEqual(html.string_to_html(digest.summary), expected_summary)

@@ -3,7 +3,7 @@
 import os
 import unittest
 from ddt import ddt, data
-from tests import read_fixture, test_data_path
+from tests import read_fixture, data_path
 from digestparser.conf import raw_config, parse_raw_config
 from digestparser import build
 
@@ -43,7 +43,7 @@ class TestBuild(unittest.TestCase):
                                   u'\xa0Image credit:\xa0Anonymous and Anonymous\xa0(CC BY\xa04.0)')
         # build now
         digest_config = parse_raw_config(raw_config(test_data.get('config_section')))
-        digest = build.build_digest(test_data_path(test_data.get('file_name')),
+        digest = build.build_digest(data_path(test_data.get('file_name')),
                                     'tmp', digest_config)
         # assert assertions
         self.assertIsNotNone(digest)

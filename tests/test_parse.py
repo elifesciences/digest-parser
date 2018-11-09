@@ -2,7 +2,7 @@ import unittest
 from ddt import ddt, data
 from docx import Document
 from digestparser import parse
-from tests import read_fixture, test_data_path
+from tests import read_fixture, data_path
 
 
 @ddt
@@ -14,7 +14,7 @@ class TestParse(unittest.TestCase):
     def test_parse_content(self):
         "test parsing all the content"
         expected = read_fixture('digest_99999.txt').decode('utf-8')
-        content = parse.parse_content(test_data_path('DIGEST 99999.docx'))
+        content = parse.parse_content(data_path('DIGEST 99999.docx'))
         self.assertEqual(content, expected)
 
     def test_html_open_close_tag_failure(self):
