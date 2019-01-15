@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import unittest
+import os
 from ddt import ddt, data, unpack
 from digestparser.utils import sanitise, formatter_string, msid_from_doi
 
@@ -18,6 +19,7 @@ class TestUtils(unittest.TestCase):
         ('../../file.docx', 'file.docx'),
         ('/file.docx', 'file.docx'),
         ('\\file.docx', 'file.docx'),
+        ('Bayés.docx', 'Bayés.docx'),
     )
     @unpack
     def test_sanitise(self, file_name, expected):
@@ -26,6 +28,20 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(output, expected,
                          'file_name {file_name}, expected {expected}, got {output}'.format(
                              file_name=file_name, expected=expected, output=output))
+
+    @data(
+        ('folder', 'Bayés_35774.docx'),
+    )
+    @unpack
+    def test_sanitise_join(self, folder_name, file_name):
+        "test os.path.join of sanitised file names"
+        expected = ''.join([folder_name, os.sep, file_name])
+        sanitised_file_name = sanitise(file_name)
+        output = os.path.join(folder_name, sanitised_file_name)
+        self.assertEqual(output, expected,
+                         ('folder_name {folder_name}, file_name {file_name}, ' + 
+                         'expected {expected}, got {output}').format(
+                             folder_name=folder_name, file_name=file_name, expected=expected, output=output))
 
     @data(
         (None, None, ''),
