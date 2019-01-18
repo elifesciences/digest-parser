@@ -110,10 +110,12 @@ def handle_zip(file_name, temp_dir):
     return docx_file_name, image_file_name
 
 
-def build_digest(file_name, temp_dir='tmp', digest_config=None):
+def build_digest(file_name, temp_dir='tmp', digest_config=None, image_file_name=None):
     "build a digest object from a DOCX input file"
     digest = None
-    docx_file_name, image_file_name = handle_zip(file_name, temp_dir)
+    docx_file_name, zip_image_file_name = handle_zip(file_name, temp_dir)
+    if not image_file_name:
+        image_file_name = zip_image_file_name
     content = parse_content(docx_file_name)
     if content:
         digest = Digest()
