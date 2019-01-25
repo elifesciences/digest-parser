@@ -117,19 +117,31 @@ class TestMediumFigure(unittest.TestCase):
         docx_file = 'DIGEST 99999.docx'
         expected_medium_content = read_fixture('medium_content_99999.py')
         # build the digest object
-        medium_content = medium_post.build_medium_content(data_path(docx_file),
-                                                          self.digest_config)
+        medium_content = medium_post.build_medium_content(
+            data_path(docx_file), 'tmp', self.digest_config)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 
     def test_build_medium_content_with_jats(self):
-        "test building from a DOCX file and converting to Medium content"
+        "test building from a zip file and converting to Medium content"
         docx_file = 'DIGEST 99999.zip'
         jats_file = fixture_file('elife-99999-v0.xml')
         expected_medium_content = read_fixture('medium_content_jats_99999.py')
         # build the digest object
         medium_content = medium_post.build_medium_content(
-            data_path(docx_file), self.digest_config, jats_file)
+            data_path(docx_file), 'tmp', self.digest_config, jats_file)
+        # test assertions
+        self.assertEqual(medium_content, expected_medium_content)
+
+    def test_build_medium_content_with_jats_and_image(self):
+        "test building from a DOCX file and converting to Medium content"
+        docx_file = 'DIGEST 99999.docx'
+        jats_file = fixture_file('elife-99999-v0.xml')
+        image_file_name = 'IMAGE 99999.jpeg'
+        expected_medium_content = read_fixture('medium_content_jats_99999.py')
+        # build the digest object
+        medium_content = medium_post.build_medium_content(
+            data_path(docx_file), 'tmp', self.digest_config, jats_file, image_file_name)
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 

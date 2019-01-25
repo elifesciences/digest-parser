@@ -124,11 +124,12 @@ def digest_medium_content_format(digest_config):
     return content_format
 
 
-def build_medium_content(file_name, digest_config=None, jats_file_name=None):
+def build_medium_content(file_name, temp_dir='tmp', digest_config=None, 
+                         jats_file_name=None, image_file_name=None):
     "build Medium content from a DOCX input file"
 
     # build the digest object
-    digest = build_digest(file_name, 'tmp', digest_config)
+    digest = build_digest(file_name, temp_dir, digest_config, image_file_name)
 
     # override the text with the jats file digest content
     if jats_file_name:
