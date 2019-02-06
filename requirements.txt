@@ -2,7 +2,7 @@ requests==2.20.0
 python-docx==0.8.6
 coverage==4.4.2
 ddt==1.1.0
-git+https://github.com/elifesciences/elife-tools.git@876835f6a537f82126ff534f13ba9f18b24e6fa1#egg=elifetools
+git+https://github.com/elifesciences/elife-tools.git@6c4f822ab8d1bed99c20da057a7907a6ad9a78ce#egg=elifetools
 configparser==3.5.0
 git+https://github.com/Medium/medium-sdk-python.git@bdf34becf6dd24e3b1fc1048c36416bcba9fe0d6#egg=medium
 mock==1.3.0
