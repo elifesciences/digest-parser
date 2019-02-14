@@ -98,6 +98,12 @@ https://doi.org/10.7554/eLife.99999
         doi = build.build_doi(content, digest_config)
         self.assertEqual(doi, expected_doi)
 
+    def test_build_author_whitespace(self):
+        """test parsing an author name with trailing whitespace"""
+        author_name = 'Author Name'
+        content = '<b>AUTHOR</b>\n%s ' % author_name
+        self.assertEqual(build.build_author(content), author_name)
+
 
 if __name__ == '__main__':
     unittest.main()
