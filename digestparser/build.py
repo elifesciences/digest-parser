@@ -2,6 +2,7 @@ import re
 from digestparser.parse import parse_content
 from digestparser.objects import Digest, Image
 from digestparser.zip import unzip_zip
+from digestparser import LOGGER
 
 
 SECTION_MAP = {
@@ -114,6 +115,10 @@ def build_digest(file_name, temp_dir='tmp', digest_config=None, image_file_name=
     "build a digest object from a DOCX input file"
     digest = None
     docx_file_name, zip_image_file_name = handle_zip(file_name, temp_dir)
+    LOGGER.info(
+        "build_digest file '%s' has docx_file_name: '%s'", file_name, docx_file_name)
+    LOGGER.info(
+        "build_digest file '%s' has zip_image_file_name: '%s'", file_name, zip_image_file_name)
     if not image_file_name:
         image_file_name = zip_image_file_name
     content = parse_content(docx_file_name)
