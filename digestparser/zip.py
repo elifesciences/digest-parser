@@ -3,6 +3,7 @@
 import zipfile
 import os
 from digestparser.utils import sanitise
+from digestparser import LOGGER
 
 
 def profile_zip(file_name):
@@ -32,11 +33,22 @@ def unzip_file(open_zipfile, zip_file_info, output_path):
 
 def zip_output_name(file_name, temp_dir):
     "a safe output path to unzip a file to"
+    LOGGER.info(
+        "zip_output_name file_name before decoding is '%s'", file_name)
     try:
         file_name = file_name.encode('cp437').decode('utf8')
     except UnicodeDecodeError:
         file_name = file_name
-    return os.path.join(temp_dir, sanitise(file_name))
+    LOGGER.info(
+        "zip_output_name file_name after decoding is '%s'", file_name)
+    safe_file_name = sanitise(file_name)
+    LOGGER.info(
+        "zip_output_name file_name '%s' to safe_file_name '%s'", file_name, safe_file_name)
+    zip_path = os.path.join(temp_dir, safe_file_name)
+    LOGGER.info(
+        "zip_output_name zip_path '%s' from temp_dir '%s', safe_file_name '%s'",
+        zip_path, temp_dir, safe_file_name)
+    return zip_path
 
 
 def unzip_zip(file_name, temp_dir):
