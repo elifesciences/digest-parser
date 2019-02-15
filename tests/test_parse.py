@@ -118,6 +118,16 @@ class TestParse(unittest.TestCase):
         output = parse.join_runs(paragraph.runs)
         self.assertEqual(output, '<i>italic</i> <b>bold.</b>')
 
+    def test_join_blank_bold_tag(self):
+        """test joining runs with last run is a bold space"""
+        document = Document()
+        paragraph = document.add_paragraph('')
+        paragraph.add_run('Author Name')
+        paragraph.add_run(' ').bold = True
+        output = parse.join_runs(paragraph.runs)
+        # space will be retained but not the bold tag
+        self.assertEqual(output, 'Author Name ')
+
 
 if __name__ == '__main__':
     unittest.main()

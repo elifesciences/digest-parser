@@ -108,9 +108,13 @@ def join_runs(runs):
     output = ''
     prev_run = None
     for run in runs:
-        output = join_run_tags(run, prev_run, output)
-        output += run.text
-        prev_run = run
+        if run.text.strip():
+            output = join_run_tags(run, prev_run, output)
+            output += run.text
+            prev_run = run
+        else:
+            # if the text is only whitespace then do not enclose it in tags
+            output += run.text
     # finish up by running one last time with prev_run
     output = join_run_tags('', prev_run, output)
     return output

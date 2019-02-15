@@ -50,7 +50,7 @@ def build_list(section_name, content):
 
 
 def build_author(content):
-    return build_singleton('author', content)
+    return build_singleton('author', content).rstrip()
 
 
 def build_title(content):
