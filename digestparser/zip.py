@@ -44,7 +44,10 @@ def zip_output_name(file_name, temp_dir):
     safe_file_name = sanitise(file_name)
     LOGGER.info(
         "zip_output_name file_name '%s' to safe_file_name '%s'", file_name, safe_file_name)
-    zip_path = os.path.join(temp_dir, safe_file_name)
+    try:
+        zip_path = os.path.join(temp_dir.encode('utf8'), safe_file_name)
+    except (UnicodeDecodeError, TypeError):
+        zip_path = os.path.join(temp_dir, safe_file_name)
     LOGGER.info(
         "zip_output_name zip_path '%s' from temp_dir '%s', safe_file_name '%s'",
         zip_path, temp_dir, safe_file_name)
