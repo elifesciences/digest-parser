@@ -28,7 +28,8 @@ def digest_formatter(digest_config, format_name, digest, content=None):
             summary=utils.formatter_string(content, 'summary'),
             body=utils.formatter_string(content, 'body'),
             footer=utils.formatter_string(content, 'footer'),
-            figure=utils.formatter_string(content, 'figure')
+            figure=utils.formatter_string(content, 'figure'),
+            msid=utils.msid_from_doi(digest.doi)
             )
     return string
 
