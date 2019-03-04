@@ -1,4 +1,3 @@
-import re
 from digestparser.parse import parse_content
 from digestparser.objects import Digest, Image
 from digestparser.zip import unzip_zip
@@ -23,14 +22,15 @@ def extract_section_content(section_name, content):
     target_section_heading = SECTION_MAP.get(section_name)
     extract_line = False
     for line in content.split("\n"):
-        if line == target_section_heading:
+        stripped_line = line.lstrip().rstrip()
+        if stripped_line == target_section_heading:
             # content will start on the next line
             extract_line = True
             continue
         if extract_line:
             # read lines until a new section heading is encountered
-            if line not in SECTION_MAP.values():
-                section_content.append(line)
+            if stripped_line not in SECTION_MAP.values():
+                section_content.append(stripped_line)
             else:
                 break
     return section_content
