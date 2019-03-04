@@ -74,6 +74,16 @@ class TestBuild(unittest.TestCase):
         "test parsing image content from blank content for coverage"
         self.assertIsNone(build.build_image(''))
 
+    def test_build_image_whitespace(self):
+        """test parsing an image credit with whitespace"""
+        image_credit = 'Anon (CC BY 4.0)\n\n\n'
+        expected_image_credit = image_credit.rstrip()
+        image_file_name = 'digest-41540.jpg'
+        content = ' <b>IMAGE CREDIT</b> \n%s' % image_credit
+        image_object = build.build_image(content, image_file_name)
+        self.assertEqual(image_object.caption, expected_image_credit)
+        self.assertEqual(image_object.file, image_file_name)
+
     def test_build_doi_manuscript_number(self):
         "test parsing a doi with manuscript number, prefers manuscript number"
         content = '''
