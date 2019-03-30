@@ -37,6 +37,7 @@ class TestJats(unittest.TestCase):
         digest.text = [
             "First <b>paragraph</b>.",
             "Second <i>paragraph</i>.",
+            ""
         ]
         expected_content = ("<p>First <bold>paragraph</bold>.</p><p>Second " +
                             "<italic>paragraph</italic>.</p>")
