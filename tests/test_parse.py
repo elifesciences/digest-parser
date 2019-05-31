@@ -128,6 +128,28 @@ class TestParse(unittest.TestCase):
         # space will be retained but not the bold tag
         self.assertEqual(output, 'Author Name ')
 
+    def test_odd_whitespace(self):
+        """test joining runs with strange whitespace based on a real example"""
+        document = Document()
+        paragraph = document.add_paragraph()
+        paragraph.add_run('AUTHOR').bold = True
+        paragraph.add_run('\n')
+        paragraph.add_run('Author Name')
+        paragraph2 = document.add_paragraph()
+        paragraph2.add_run('DIGEST').bold = True
+        paragraph2.add_run(' ').bold = True
+        paragraph2.add_run('TITLE').bold = True
+        paragraph2.add_run('\n').bold = True
+        # \u2028 will be stripped out
+        paragraph2.add_run('\u2028').bold = True
+        paragraph2.add_run('\u201C')
+        paragraph2.add_run('A title')
+        paragraph2.add_run('\u201D')
+        output = parse.parse_paragraphs(document)
+        # space will be retained but not the bold tag
+        self.assertEqual(
+            output, '<b>AUTHOR</b>\nAuthor Name\n<b>DIGEST TITLE</b>\n\u201CA title\u201D\n')
+
 
 if __name__ == '__main__':
     unittest.main()
