@@ -2,12 +2,19 @@ import sys
 from docx import Document
 
 
+# character constants
+LINE_SEPARATOR = u'\u2028'
+
+
 def parse_content(file_name):
     "return all the content for testing"
-    content = ''
     document = Document(file_name)
-    # print(document.core_properties.author)
-    # print(document.paragraphs)
+    return parse_paragraphs(document)
+
+
+def parse_paragraphs(document):
+    """join the parsed paragraphs from the document"""
+    content = ''
     for para in document.paragraphs:
         content += join_runs(para.runs) + "\n"
     return content
@@ -104,17 +111,24 @@ def join_run_tags(run, prev_run, output=''):
     return output
 
 
+def remove_odd_characters(string):
+    """replace invisible whitespace characters"""
+    # LINE SEPARATOR
+    return string.replace(LINE_SEPARATOR, '')
+
+
 def join_runs(runs):
     output = ''
     prev_run = None
     for run in runs:
-        if run.text.strip():
+        cleaned_text = remove_odd_characters(run.text)
+        if cleaned_text.strip():
             output = join_run_tags(run, prev_run, output)
-            output += run.text
+            output += cleaned_text
             prev_run = run
         else:
             # if the text is only whitespace then do not enclose it in tags
-            output += run.text
+            output += cleaned_text
     # finish up by running one last time with prev_run
     output = join_run_tags('', prev_run, output)
     return output
