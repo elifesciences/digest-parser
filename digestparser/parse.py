@@ -1,6 +1,9 @@
 import sys
 from docx import Document
-from digestparser import LINE_SEPARATOR
+
+
+# character constants
+LINE_SEPARATOR = u'\u2028'
 
 
 def parse_content(file_name):

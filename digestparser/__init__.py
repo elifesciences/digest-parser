@@ -8,6 +8,3 @@ FORMATTER = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 HDLR.setFormatter(FORMATTER)
 LOGGER.addHandler(HDLR)
 LOGGER.setLevel(logging.INFO)
-
-# character constants
-LINE_SEPARATOR = u'\u2028'

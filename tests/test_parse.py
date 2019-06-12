@@ -1,7 +1,8 @@
 import unittest
 from ddt import ddt, data
 from docx import Document
-from digestparser import parse, LINE_SEPARATOR
+from digestparser import parse
+from digestparser.parse import LINE_SEPARATOR
 from tests import read_fixture, data_path
 
 
