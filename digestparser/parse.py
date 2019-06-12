@@ -1,5 +1,6 @@
 import sys
 from docx import Document
+from digestparser import LINE_SEPARATOR
 
 
 def parse_content(file_name):
@@ -110,7 +111,7 @@ def join_run_tags(run, prev_run, output=''):
 def remove_odd_characters(string):
     """replace invisible whitespace characters"""
     # LINE SEPARATOR
-    return string.replace('\u2028', '')
+    return string.replace(LINE_SEPARATOR, '')
 
 
 def join_runs(runs):

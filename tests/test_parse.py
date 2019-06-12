@@ -1,7 +1,7 @@
 import unittest
 from ddt import ddt, data
 from docx import Document
-from digestparser import parse
+from digestparser import parse, LINE_SEPARATOR
 from tests import read_fixture, data_path
 
 
@@ -141,7 +141,7 @@ class TestParse(unittest.TestCase):
         paragraph2.add_run('TITLE').bold = True
         paragraph2.add_run('\n').bold = True
         # \u2028 will be stripped out
-        paragraph2.add_run('\u2028').bold = True
+        paragraph2.add_run(LINE_SEPARATOR).bold = True
         paragraph2.add_run('\u201C')
         paragraph2.add_run('A title')
         paragraph2.add_run('\u201D')
