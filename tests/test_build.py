@@ -114,6 +114,11 @@ https://doi.org/10.7554/eLife.99999
         content = '<b>AUTHOR</b>\n%s ' % author_name
         self.assertEqual(build.build_author(content), author_name)
 
+    def test_build_author_none(self):
+        """test for when author is none"""
+        content = '<b>AUTHOR INCORRECT HEADING NAME</b>\nAuthor Name'
+        self.assertIsNone(build.build_author(content))
+
 
 if __name__ == '__main__':
     unittest.main()
