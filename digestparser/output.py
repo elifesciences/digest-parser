@@ -3,7 +3,6 @@
 import os
 from bs4 import BeautifulSoup
 from docx import Document
-from elifetools.utils import unicode_value
 from digestparser.build import build_digest
 import digestparser.utils as utils
 
@@ -52,10 +51,10 @@ def docx_file_name(digest, digest_config=None):
     default_file_name_pattern = u'{author}_{msid:0>5}.docx'
     file_name_pattern = default_file_name_pattern
     if digest_config and 'output_file_name_pattern' in digest_config:
-        file_name_pattern = unicode_value(digest_config.get('output_file_name_pattern'))
+        file_name_pattern = str(digest_config.get('output_file_name_pattern'))
     # collect the values from the digest if present
     file_name = file_name_pattern.format(
-        author=utils.unicode_decode(digest.author),
+        author=digest.author,
         msid=str(utils.msid_from_doi(digest.doi))
     )
     return utils.sanitise_file_name(file_name)

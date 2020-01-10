@@ -1,6 +1,7 @@
 "compose a Medium post from digest content"
 
 import os
+import urllib
 from collections import OrderedDict
 from medium import Client
 from digestparser.build import build_digest
@@ -42,7 +43,7 @@ def image_formatter(digest_config, format_name, content=None):
             image_url=utils.formatter_string(content, 'image_url'),
             figcaption=utils.formatter_string(content, 'figcaption'),
             caption=utils.formatter_string(content, 'caption'),
-            file_name=utils.url_quote(utils.formatter_string(content, 'file_name')),
+            file_name=urllib.parse.quote(utils.formatter_string(content, 'file_name')),
             msid=utils.formatter_string(content, 'msid'),
             )
     return string

@@ -6,15 +6,6 @@ import urllib
 from slugify import slugify
 
 
-def unicode_decode(string):
-    "try to decode from utf8"
-    try:
-        string = string.decode('utf8')
-    except (UnicodeEncodeError, AttributeError):
-        pass
-    return string
-
-
 def sanitise(file_name):
     "replace unwanted characters in file name if present"
     if not file_name:
@@ -62,11 +53,3 @@ def msid_from_doi(doi):
     except (AttributeError, ValueError, IndexError):
         msid = None
     return msid
-
-
-def url_quote(string):
-    "escape for url quoting with python 2 or 3 method"
-    if hasattr(urllib, 'parse'):
-        # python 3
-        return urllib.parse.quote(string)
-    return urllib.quote(string)
