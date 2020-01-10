@@ -54,7 +54,7 @@ def docx_file_name(digest, digest_config=None):
         file_name_pattern = str(digest_config.get('output_file_name_pattern'))
     # collect the values from the digest if present
     file_name = file_name_pattern.format(
-        author=utils.unicode_decode(digest.author),
+        author=digest.author,
         msid=str(utils.msid_from_doi(digest.doi))
     )
     return utils.sanitise_file_name(file_name)
