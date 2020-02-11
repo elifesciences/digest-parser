@@ -2,7 +2,7 @@
 
 echo "Test suite"
 tox
-. .tox/py35/bin/activate
+. .tox/py3/bin/activate
 
 echo "Coverage analysis"
 pip install coveralls
