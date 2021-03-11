@@ -15,7 +15,7 @@ setup(
     license='MIT',
     install_requires=[
         "python-docx",
-        "elifetools"
+        "elifetools @ git+https://github.com/elifesciences/elife-tools"
     ],
     url='https://github.com/elifesciences/digest-parser',
     maintainer='eLife Sciences Publications Ltd.',
