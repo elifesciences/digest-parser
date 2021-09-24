@@ -11,11 +11,19 @@ def allowed_xml_tag_fragments():
     such as the case would be for mml: or table td tags
     """
     return (
-        '<i>', '</i>', '<i/>',
-        '<b>', '</b>', '<b/>',
-        '<sub>', '</sub>', '<sub/>',
-        '<sup>', '</sup>', '<sup/>',
-        )
+        "<i>",
+        "</i>",
+        "<i/>",
+        "<b>",
+        "</b>",
+        "<b/>",
+        "<sub>",
+        "</sub>",
+        "<sub/>",
+        "<sup>",
+        "</sup>",
+        "<sup/>",
+    )
 
 
 def escape_html(html_string):

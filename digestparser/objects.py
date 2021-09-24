@@ -3,7 +3,7 @@ Digest object definitions
 """
 
 
-class Digest(object):
+class Digest:
     "Digest object"
 
     def __new__(cls):
@@ -24,7 +24,7 @@ class Digest(object):
         self.subjects = []
 
 
-class Image(object):
+class Image:
     "Image object"
 
     def __new__(cls):
