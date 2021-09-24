@@ -3,7 +3,7 @@ from docx import Document
 
 
 # character constants
-LINE_SEPARATOR = u'\u2028'
+LINE_SEPARATOR = u"\u2028"
 
 
 def parse_content(file_name):
@@ -14,7 +14,7 @@ def parse_content(file_name):
 
 def parse_paragraphs(document):
     """join the parsed paragraphs from the document"""
-    content = ''
+    content = ""
     for para in document.paragraphs:
         content += join_runs(para.runs) + "\n"
     return content
@@ -23,10 +23,10 @@ def parse_paragraphs(document):
 def html_open_tag(style):
     "for the style return the HTML open tag"
     style_map = {
-        'italic': '<i>',
-        'bold': '<b>',
-        'subscript': '<sub>',
-        'superscript': '<sup>'
+        "italic": "<i>",
+        "bold": "<b>",
+        "subscript": "<sub>",
+        "superscript": "<sup>",
     }
     return style_map.get(style)
 
@@ -34,10 +34,10 @@ def html_open_tag(style):
 def html_close_tag(style):
     "for the style return the HTML close tag"
     style_map = {
-        'italic': '</i>',
-        'bold': '</b>',
-        'subscript': '</sub>',
-        'superscript': '</sup>'
+        "italic": "</i>",
+        "bold": "</b>",
+        "subscript": "</sub>",
+        "superscript": "</sup>",
     }
     return style_map.get(style)
 
@@ -69,9 +69,9 @@ def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, att
     if not open_tag or not close_tag:
         return output
     # add the close tag first
-    if (
-            (one_has_attr and one_contains_break) or
-            (one_has_attr and two_has_attr is not True)):
+    if (one_has_attr and one_contains_break) or (
+        one_has_attr and two_has_attr is not True
+    ):
         # check for new line
         if output.endswith("\n"):
             output = output.rstrip("\n") + close_tag + "\n"
@@ -81,9 +81,9 @@ def open_close_style(one_has_attr, two_has_attr, one_contains_break, output, att
         else:
             output += close_tag
     # add the open tag
-    if (
-            (two_has_attr and one_contains_break) or
-            (two_has_attr and one_has_attr is not True)):
+    if (two_has_attr and one_contains_break) or (
+        two_has_attr and one_has_attr is not True
+    ):
         output += open_tag
     return output
 
@@ -96,16 +96,16 @@ def run_open_close_style(run, prev_run, output, attribute):
         two_has_attr=run_has_attr(run, attribute),
         one_contains_break=run_contains_break(prev_run),
         output=output,
-        attribute=attribute
+        attribute=attribute,
     )
 
 
-def join_run_tags(run, prev_run, output=''):
+def join_run_tags(run, prev_run, output=""):
     "process all the possible tags in the run"
-    style_order = ['italic', 'bold', 'subscript', 'superscript']
-    if run_has_attr(prev_run, 'bold'):
+    style_order = ["italic", "bold", "subscript", "superscript"]
+    if run_has_attr(prev_run, "bold"):
         # close bold tags first if previous run was bold
-        style_order = ['bold', 'italic', 'subscript', 'superscript']
+        style_order = ["bold", "italic", "subscript", "superscript"]
     for style in style_order:
         output = run_open_close_style(run, prev_run, output, style)
     return output
@@ -114,11 +114,11 @@ def join_run_tags(run, prev_run, output=''):
 def remove_odd_characters(string):
     """replace invisible whitespace characters"""
     # LINE SEPARATOR
-    return string.replace(LINE_SEPARATOR, '')
+    return string.replace(LINE_SEPARATOR, "")
 
 
 def join_runs(runs):
-    output = ''
+    output = ""
     prev_run = None
     for run in runs:
         cleaned_text = remove_odd_characters(run.text)
@@ -130,17 +130,21 @@ def join_runs(runs):
             # if the text is only whitespace then do not enclose it in tags
             output += cleaned_text
     # finish up by running one last time with prev_run
-    output = join_run_tags('', prev_run, output)
+    output = join_run_tags("", prev_run, output)
     return output
 
 
 if __name__ == "__main__":
     # debug while developing
     if len(sys.argv) != 2:
-        sys.exit("Usage: python {0} DOCX_FILE\nExample: python {0} 'tests/test_data/DIGEST 99999.docx'".format(*sys.argv))
+        sys.exit(
+            "Usage: python {0} DOCX_FILE\nExample: python {0} 'tests/test_data/DIGEST 99999.docx'".format(
+                *sys.argv
+            )
+        )
 
     DIGEST_CONTENT = parse_content(sys.argv[1])
-    print(DIGEST_CONTENT.encode('utf-8'))
+    print(DIGEST_CONTENT.encode("utf-8"))
 
     """
     for file_name in ['DIGEST 20713.docx', 'DIGEST 24728.docx',

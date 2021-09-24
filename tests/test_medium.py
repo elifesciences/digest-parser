@@ -10,6 +10,7 @@ from tests import read_fixture, data_path, fixture_file
 
 class MockClient(object):
     "mock Medium client to use in testing"
+
     def __new__(cls, create_post_return=None):
         new_instance = object.__new__(cls)
         new_instance.__init__(create_post_return)
@@ -22,21 +23,30 @@ class MockClient(object):
             self.create_post_return = create_post_return
         else:
             self.create_post_return = {
-                'canonicalUrl': '',
-                'license': 'all-rights-reserved',
-                'title': 'My Title',
-                'url': 'https://medium.com/@kylehg/55050649c95',
-                'tags': ['python', 'is', 'great'],
-                'authorId': '1f86...',
-                'publishStatus': 'draft',
-                'id': '55050649c95'
-                }
+                "canonicalUrl": "",
+                "license": "all-rights-reserved",
+                "title": "My Title",
+                "url": "https://medium.com/@kylehg/55050649c95",
+                "tags": ["python", "is", "great"],
+                "authorId": "1f86...",
+                "publishStatus": "draft",
+                "id": "55050649c95",
+            }
 
     def get_current_user(self):
-        return {'id': None}
+        return {"id": None}
 
-    def create_post(self, user_id, title, content, content_format, tags=None,
-                    canonical_url=None, publish_status=None, license=None):
+    def create_post(
+        self,
+        user_id,
+        title,
+        content,
+        content_format,
+        tags=None,
+        canonical_url=None,
+        publish_status=None,
+        license=None,
+    ):
         "mock the create_post of the medium Client"
         # use all the variables to satisfy the linter self-use directive
         user_id = user_id
@@ -53,6 +63,7 @@ class MockClient(object):
 
 class TestMockClient(unittest.TestCase):
     "test the mock client for coverage"
+
     def test_mock_client(self):
         create_post_return = {}
         user_id = None
@@ -77,75 +88,83 @@ def build_image(caption=None, file_value=None):
 
 
 class TestMediumFigure(unittest.TestCase):
-
     def setUp(self):
-        self.digest_config = parse_raw_config(raw_config('elife'))
+        self.digest_config = parse_raw_config(raw_config("elife"))
 
     def test_digest_figure_caption_content(self):
         "test figure caption content formatting"
-        image = build_image(
-            caption=u'Caption. Anonymous (CC BY\xa04.0)', file_value='')
-        expected = u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption>'
-        self.assertEqual(medium_post.digest_figure_caption_content(
-            self.digest_config, image), expected)
+        image = build_image(caption=u"Caption. Anonymous (CC BY\xa04.0)", file_value="")
+        expected = u"<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption>"
+        self.assertEqual(
+            medium_post.digest_figure_caption_content(self.digest_config, image),
+            expected,
+        )
 
     def test_digest_figure_image_url(self):
         "test figure image url formatting"
-        image = build_image(file_value='test.jpg')
+        image = build_image(file_value="test.jpg")
         digest = Digest()
-        digest.doi = '10.7554/eLife.99999'
-        expected = (
-            u'https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg')
-        self.assertEqual(medium_post.digest_figure_image_url(
-            self.digest_config, image, digest), expected)
+        digest.doi = "10.7554/eLife.99999"
+        expected = u"https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg"
+        self.assertEqual(
+            medium_post.digest_figure_image_url(self.digest_config, image, digest),
+            expected,
+        )
 
     def test_digest_figure_content(self):
         "test figure caption formatting"
         image = build_image(
-            caption=u'Caption. Anonymous (CC BY\xa04.0)', file_value='test.jpg')
+            caption=u"Caption. Anonymous (CC BY\xa04.0)", file_value="test.jpg"
+        )
         digest = Digest()
-        digest.doi = '10.7554/eLife.99999'
+        digest.doi = "10.7554/eLife.99999"
         expected = (
-            u'<figure>' +
-            u'<img src="https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg" />' +
-            u'<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>')
-        self.assertEqual(medium_post.digest_figure_content(
-            self.digest_config, image, digest), expected)
+            u"<figure>"
+            + u'<img src="https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg" />'
+            + u"<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>"
+        )
+        self.assertEqual(
+            medium_post.digest_figure_content(self.digest_config, image, digest),
+            expected,
+        )
 
     def test_build_medium_content(self):
         "test building from a DOCX file and converting to Medium content"
-        docx_file = 'DIGEST 99999.docx'
-        expected_medium_content = read_fixture('medium_content_99999.py')
+        docx_file = "DIGEST 99999.docx"
+        expected_medium_content = read_fixture("medium_content_99999.py")
         # build the digest object
         medium_content = medium_post.build_medium_content(
-            data_path(docx_file), 'tmp', self.digest_config)
+            data_path(docx_file), "tmp", self.digest_config
+        )
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 
     def test_build_medium_content_with_jats(self):
         "test building from a zip file and converting to Medium content"
-        docx_file = 'DIGEST 99999.zip'
-        jats_file = fixture_file('elife-99999-v0.xml')
-        expected_medium_content = read_fixture('medium_content_jats_99999.py')
+        docx_file = "DIGEST 99999.zip"
+        jats_file = fixture_file("elife-99999-v0.xml")
+        expected_medium_content = read_fixture("medium_content_jats_99999.py")
         # build the digest object
         medium_content = medium_post.build_medium_content(
-            data_path(docx_file), 'tmp', self.digest_config, jats_file)
+            data_path(docx_file), "tmp", self.digest_config, jats_file
+        )
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 
     def test_build_medium_content_with_jats_and_image(self):
         "test building from a DOCX file and converting to Medium content"
-        docx_file = 'DIGEST 99999.docx'
-        jats_file = fixture_file('elife-99999-v0.xml')
-        image_file_name = 'IMAGE 99999.jpeg'
-        expected_medium_content = read_fixture('medium_content_jats_99999.py')
+        docx_file = "DIGEST 99999.docx"
+        jats_file = fixture_file("elife-99999-v0.xml")
+        image_file_name = "IMAGE 99999.jpeg"
+        expected_medium_content = read_fixture("medium_content_jats_99999.py")
         # build the digest object
         medium_content = medium_post.build_medium_content(
-            data_path(docx_file), 'tmp', self.digest_config, jats_file, image_file_name)
+            data_path(docx_file), "tmp", self.digest_config, jats_file, image_file_name
+        )
         # test assertions
         self.assertEqual(medium_content, expected_medium_content)
 
-    @patch.object(medium_post, 'Client')
+    @patch.object(medium_post, "Client")
     def test_post_content(self, fake_client):
         "test posting content to Medium mocking the endpoint"
         fake_client.return_value = MockClient()
@@ -153,14 +172,16 @@ class TestMediumFigure(unittest.TestCase):
         # do the action
         post = medium_post.post_content(medium_content, self.digest_config)
         # test assertions
-        self.assertEqual(post.get('publishStatus'), 'draft')
+        self.assertEqual(post.get("publishStatus"), "draft")
 
     def test_image_formatter(self):
         "test image formatter for coverage"
-        expected = '<figcaption></figcaption>'
-        string = medium_post.image_formatter(self.digest_config, 'medium_figcaption_pattern')
+        expected = "<figcaption></figcaption>"
+        string = medium_post.image_formatter(
+            self.digest_config, "medium_figcaption_pattern"
+        )
         self.assertEqual(string, expected)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
