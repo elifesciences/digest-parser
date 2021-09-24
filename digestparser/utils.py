@@ -2,8 +2,6 @@
 
 "utility helper functions"
 import re
-import urllib
-from slugify import slugify
 
 
 def sanitise(file_name):

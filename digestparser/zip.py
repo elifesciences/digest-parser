@@ -37,7 +37,7 @@ def zip_output_name(file_name, temp_dir):
     try:
         file_name = file_name.encode("cp437").decode("utf8")
     except UnicodeDecodeError:
-        file_name = file_name
+        pass
     LOGGER.info("zip_output_name file_name after decoding is '%s'", file_name)
     safe_file_name = sanitise(file_name)
     LOGGER.info(

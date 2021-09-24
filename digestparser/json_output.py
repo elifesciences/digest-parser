@@ -1,6 +1,5 @@
 "build JSON output from digest content"
 import os
-import time
 import copy
 from collections import OrderedDict
 import requests
@@ -9,7 +8,6 @@ from digestparser.utils import formatter_string, msid_from_doi
 from digestparser.jats import (
     parse_jats_file,
     parse_jats_digest,
-    parse_jats_pub_date,
     parse_jats_subjects,
     xml_to_html,
 )

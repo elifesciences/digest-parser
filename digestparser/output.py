@@ -1,13 +1,12 @@
 "build DOCX output from digest content"
 
-import os
 from bs4 import BeautifulSoup
 from docx import Document
+from digestparser import utils
 from digestparser.build import build_digest
-import digestparser.utils as utils
 
 
-class RunPart(object):
+class RunPart:
     "A run part to hold text and style attributes"
 
     def __new__(cls):

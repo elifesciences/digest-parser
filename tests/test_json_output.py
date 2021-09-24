@@ -10,7 +10,7 @@ from digestparser.conf import raw_config, parse_raw_config
 from tests import read_fixture, data_path, fixture_file
 
 
-class FakeResponse(object):
+class FakeResponse:
     def __new__(cls, json_response):
         new_instance = object.__new__(cls)
         new_instance.__init__(json_response)

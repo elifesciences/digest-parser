@@ -8,7 +8,7 @@ from digestparser import medium_post
 from tests import read_fixture, data_path, fixture_file
 
 
-class MockClient(object):
+class MockClient:
     "mock Medium client to use in testing"
 
     def __new__(cls, create_post_return=None):
@@ -18,6 +18,14 @@ class MockClient(object):
 
     def __init__(self, create_post_return=None):
         self.access_token = None
+        self.user_id = None
+        self.title = None
+        self.content = None
+        self.content_format = None
+        self.tags = None
+        self.canonical_url = None
+        self.publish_status = None
+        self.license = None
         # default data returned
         if create_post_return is not None:
             self.create_post_return = create_post_return
@@ -49,14 +57,14 @@ class MockClient(object):
     ):
         "mock the create_post of the medium Client"
         # use all the variables to satisfy the linter self-use directive
-        user_id = user_id
-        title = title
-        content = content
-        content_format = content_format
-        tags = tags
-        canonical_url = canonical_url
-        publish_status = publish_status
-        license = license
+        self.user_id = user_id
+        self.title = title
+        self.content = content
+        self.content_format = content_format
+        self.tags = tags
+        self.canonical_url = canonical_url
+        self.publish_status = publish_status
+        self.license = license
         # now can return the data
         return self.create_post_return
 

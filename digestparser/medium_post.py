@@ -4,11 +4,10 @@ import os
 import urllib
 from collections import OrderedDict
 from medium import Client
+from digestparser import utils
 from digestparser.build import build_digest
 from digestparser.jats import parse_jats_file, parse_jats_digest, xml_to_html
 from digestparser.html import string_to_html
-from digestparser.conf import raw_config, parse_raw_config
-import digestparser.utils as utils
 
 
 def digest_medium_title(digest):
