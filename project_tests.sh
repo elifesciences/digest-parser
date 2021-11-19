@@ -1,12 +1,11 @@
 #!/bin/bash
-
 echo "Test suite"
-tox
-. .tox/py3/bin/activate
-
-echo "Coverage analysis"
-pip install coveralls
-COVERALLS_REPO_TOKEN=$(cat /etc/coveralls/tokens/digest-parser) coveralls
+set -e
+. mkvenv.sh
+source venv/bin/activate
+pip install pip wheel pytest coverage --upgrade
+pip install -r requirements.txt
+coverage run -m pytest
 
 echo "Integration testing of digest parsing"
 python digestparser/parse.py 'tests/test_data/DIGEST 99999.docx'
