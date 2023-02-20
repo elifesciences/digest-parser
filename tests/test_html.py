@@ -25,7 +25,7 @@ class TestHtml(unittest.TestCase):
     def test_build_to_html(self):
         "test building from a DOCX file and converting to HTML"
         docx_file = "DIGEST 99999.docx"
-        expected_title = u"Fishing for errors in the tests"
+        expected_title = "Fishing for errors in the tests"
         expected_summary = read_fixture("html_content_99999_summary.txt").decode(
             "utf-8"
         )

@@ -3,7 +3,7 @@ from docx import Document
 
 
 # character constants
-LINE_SEPARATOR = u"\u2028"
+LINE_SEPARATOR = "\u2028"
 
 
 def parse_content(file_name):

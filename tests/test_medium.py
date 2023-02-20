@@ -101,8 +101,8 @@ class TestMediumFigure(unittest.TestCase):
 
     def test_digest_figure_caption_content(self):
         "test figure caption content formatting"
-        image = build_image(caption=u"Caption. Anonymous (CC BY\xa04.0)", file_value="")
-        expected = u"<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption>"
+        image = build_image(caption="Caption. Anonymous (CC BY\xa04.0)", file_value="")
+        expected = "<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption>"
         self.assertEqual(
             medium_post.digest_figure_caption_content(self.digest_config, image),
             expected,
@@ -113,7 +113,7 @@ class TestMediumFigure(unittest.TestCase):
         image = build_image(file_value="test.jpg")
         digest = Digest()
         digest.doi = "10.7554/eLife.99999"
-        expected = u"https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg"
+        expected = "https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg"
         self.assertEqual(
             medium_post.digest_figure_image_url(self.digest_config, image, digest),
             expected,
@@ -122,14 +122,14 @@ class TestMediumFigure(unittest.TestCase):
     def test_digest_figure_content(self):
         "test figure caption formatting"
         image = build_image(
-            caption=u"Caption. Anonymous (CC BY\xa04.0)", file_value="test.jpg"
+            caption="Caption. Anonymous (CC BY\xa04.0)", file_value="test.jpg"
         )
         digest = Digest()
         digest.doi = "10.7554/eLife.99999"
         expected = (
-            u"<figure>"
-            + u'<img src="https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg" />'
-            + u"<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>"
+            "<figure>"
+            + '<img src="https://iiif.elifesciences.org/digests/99999%2Ftest.jpg/full/full/0/default.jpg" />'
+            + "<figcaption>Caption. Anonymous (CC BY\xa04.0)</figcaption></figure>"
         )
         self.assertEqual(
             medium_post.digest_figure_content(self.digest_config, image, digest),

@@ -18,10 +18,10 @@ def sanitise(file_name):
 def char_map():
     "set of character replacements for use in sanitising file names"
     return {
-        u"’": "'",
-        u"‘": "'",
-        u"“": '"',
-        u"”": '"',
+        "’": "'",
+        "‘": "'",
+        "“": '"',
+        "”": '"',
     }
 
 
@@ -45,9 +45,12 @@ def formatter_string(content, attribute):
 
 
 def msid_from_doi(doi):
-    "return just the id portion of the doi"
-    try:
-        msid = int(doi.split(".")[-1])
-    except (AttributeError, ValueError, IndexError):
-        msid = None
-    return msid
+    "return just the article id portion of an eLife doi as an integer"
+    if not doi:
+        return
+    if not isinstance(doi, str):
+        return
+    regex = r"10\.7554/elife\.(?P<msid>\d+)"
+    match_list = re.findall(regex, doi, re.IGNORECASE)
+    if len(match_list) > 0:
+        return int(match_list[0])
