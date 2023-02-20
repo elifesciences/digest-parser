@@ -45,7 +45,7 @@ def formatter_string(content, attribute):
 
 
 def msid_from_doi(doi):
-    "return just the article id portion of an eLife doi"
+    "return just the article id portion of an eLife doi as an integer"
     if not doi:
         return
     if not isinstance(doi, str):
