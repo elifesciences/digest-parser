@@ -28,14 +28,14 @@ class TestBuild(unittest.TestCase):
     def test_build_digest(self, test_data):
         "check building a digest object from a DOCX file"
         # note: below after 'the' is a unicode non-breaking space character
-        expected_author = u"Anonymous"
-        expected_title = u"Fishing for errors in the\xa0tests"
+        expected_author = "Anonymous"
+        expected_title = "Fishing for errors in the\xa0tests"
         expected_summary = (
-            u"Testing a document which mimics the format of a file we’ve used  "
+            "Testing a document which mimics the format of a file we’ve used  "
             + "before plus CO<sub>2</sub> and Ca<sup>2+</sup>."
         )
         expected_keywords = ["Face Recognition", "Neuroscience", "Vision"]
-        expected_doi = u"https://doi.org/10.7554/eLife.99999"
+        expected_doi = "https://doi.org/10.7554/eLife.99999"
         expected_text_len = 3
         expected_text_0 = read_fixture("digest_content_99999_text_1.txt").decode(
             "utf-8"
@@ -47,8 +47,8 @@ class TestBuild(unittest.TestCase):
             "utf-8"
         )
         expected_image_caption = (
-            u"<b>It’s not just mammals who can recognise sample data.</b>"
-            + u"\xa0Image credit:\xa0Anonymous and Anonymous\xa0(CC BY\xa04.0)"
+            "<b>It’s not just mammals who can recognise sample data.</b>"
+            + "\xa0Image credit:\xa0Anonymous and Anonymous\xa0(CC BY\xa04.0)"
         )
         # build now
         digest_config = parse_raw_config(raw_config(test_data.get("config_section")))

@@ -48,7 +48,7 @@ def html_runs(html):
 
 def docx_file_name(digest, digest_config=None):
     "name for the docx output file formatted from the config if available"
-    default_file_name_pattern = u"{author}_{msid:0>5}.docx"
+    default_file_name_pattern = "{author}_{msid:0>5}.docx"
     file_name_pattern = default_file_name_pattern
     if digest_config and "output_file_name_pattern" in digest_config:
         file_name_pattern = str(digest_config.get("output_file_name_pattern"))

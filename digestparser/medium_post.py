@@ -17,7 +17,7 @@ def digest_medium_title(digest):
 
 def digest_formatter(digest_config, format_name, digest, content=None):
     "take a format from the config file and convert it to a string using digest attributes"
-    string = u""
+    string = ""
     if digest_config.get(format_name):
         string = digest_config.get(format_name).format(
             digest_title=string_to_html(digest.title),
@@ -36,7 +36,7 @@ def digest_formatter(digest_config, format_name, digest, content=None):
 
 def image_formatter(digest_config, format_name, content=None):
     "take a format from the config file and convert it to a string using image attributes"
-    string = u""
+    string = ""
     if digest_config.get(format_name):
         string = digest_config.get(format_name).format(
             image_url=utils.formatter_string(content, "image_url"),
@@ -79,7 +79,7 @@ def digest_medium_content(digest, digest_config=None):
     # summary
     summary = digest_formatter(digest_config, "medium_summary_pattern", digest)
     # body
-    body = u""
+    body = ""
     for text in digest.text:
         content = {"text": text}
         # convert text into paragraphs converting inline HTML tags
@@ -89,7 +89,7 @@ def digest_medium_content(digest, digest_config=None):
     # footer
     footer = digest_formatter(digest_config, "medium_footer_pattern", digest)
     # figure
-    figure = u""
+    figure = ""
     if digest.image and digest.image.file:
         figure = digest_figure_content(digest_config, digest.image, digest)
     # format the final content medium_content

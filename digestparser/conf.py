@@ -1,7 +1,7 @@
 import configparser
 import json
 
-CONFIG_FILE = u"digest.cfg"
+CONFIG_FILE = "digest.cfg"
 BOOLEAN_VALUES = []
 INT_VALUES = []
 LIST_VALUES = []

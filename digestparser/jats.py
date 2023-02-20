@@ -67,7 +67,7 @@ def xml_to_html(xml_string):
 
 def digest_jats(digest):
     "convert a digest object to JATS XML output"
-    jats_content = u""
+    jats_content = ""
     # convert text into paragraphs converting inline HTML tags
     for text in [text.strip() for text in digest.text if text and text.strip()]:
         jats_content += "<p>" + html_to_xml(text) + "</p>"

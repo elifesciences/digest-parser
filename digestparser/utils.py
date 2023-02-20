@@ -18,10 +18,10 @@ def sanitise(file_name):
 def char_map():
     "set of character replacements for use in sanitising file names"
     return {
-        u"’": "'",
-        u"‘": "'",
-        u"“": '"',
-        u"”": '"',
+        "’": "'",
+        "‘": "'",
+        "“": '"',
+        "”": '"',
     }
 
 

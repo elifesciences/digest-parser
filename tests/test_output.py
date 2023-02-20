@@ -64,17 +64,17 @@ class TestOutput(unittest.TestCase):
         },
         {
             "scenario": "all digest data and not using a config",
-            "author": u"Anonymous",
+            "author": "Anonymous",
             "doi": "10.7554/eLife.99999",
             "use_config": False,
-            "expected_file_name": u"Anonymous_99999.docx",
+            "expected_file_name": "Anonymous_99999.docx",
         },
         {
             "scenario": "missing digest data and not using a config",
             "author": None,
             "doi": None,
             "use_config": False,
-            "expected_file_name": u"None_0None.docx",
+            "expected_file_name": "None_0None.docx",
         },
         {
             "scenario": "unicode author name using a default config",
@@ -82,35 +82,35 @@ class TestOutput(unittest.TestCase):
             "doi": "10.7554/eLife.99999",
             "use_config": True,
             "config_section": None,
-            "expected_file_name": u"Nö_99999.docx",
+            "expected_file_name": "Nö_99999.docx",
         },
         {
             "scenario": "unicode author name and not using a config",
-            "author": u"Nö",
+            "author": "Nö",
             "doi": "10.7554/eLife.99999",
             "use_config": False,
-            "expected_file_name": u"Nö_99999.docx",
+            "expected_file_name": "Nö_99999.docx",
         },
         {
             "scenario": "ugly ugly author name and not using a config",
             "author": '‘“Nö(%)”/\\:"<>|*’',
             "doi": "10.7554/eLife.99999",
             "use_config": False,
-            "expected_file_name": u"'Nö(%)'_99999.docx",
+            "expected_file_name": "'Nö(%)'_99999.docx",
         },
         {
             "scenario": "testing additional unicode characters",
             "author": "á好",
             "doi": "10.7554/eLife.99999",
             "use_config": False,
-            "expected_file_name": u"á好_99999.docx",
+            "expected_file_name": "á好_99999.docx",
         },
         {
             "scenario": "testing unicode characters using the config pattern",
-            "author": u"\xe1",
+            "author": "\xe1",
             "doi": "10.7554/eLife.99999",
             "use_config": True,
-            "expected_file_name": u"á_99999.docx",
+            "expected_file_name": "á_99999.docx",
         },
     )
     def test_docx_file_name(self, test_data):
@@ -131,7 +131,7 @@ class TestOutput(unittest.TestCase):
         self.assertEqual(
             file_name,
             test_data.get("expected_file_name"),
-            u"failed in scenario '{scenario}', got file_name {file_name}".format(
+            "failed in scenario '{scenario}', got file_name {file_name}".format(
                 scenario=test_data.get("scenario"), file_name=file_name
             ),
         )
@@ -141,7 +141,7 @@ class TestOutput(unittest.TestCase):
         self.assertEqual(
             os.path.join("tmp", test_data.get("expected_file_name")),
             output_file_name,
-            u"failed creating file in scenario '{scenario}', got file_name {file_name}".format(
+            "failed creating file in scenario '{scenario}', got file_name {file_name}".format(
                 scenario=test_data.get("scenario"), file_name=output_file_name
             ),
         )
